@@ -1,0 +1,39 @@
+2025-11-04 21:03:38 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-04 21:03:38 - INFO - [33mPress CTRL+C to quit[0m
+2025-11-04 21:03:38 - INFO -  * Restarting with watchdog (fsevents)
+2025-11-04 21:03:38 - WARNING -  * Debugger is active!
+2025-11-04 21:03:38 - INFO -  * Debugger PIN: 823-802-455
+2025-11-04 21:03:41 - INFO - 127.0.0.1 - - [04/Nov/2025 21:03:41] "GET / HTTP/1.1" 200 -
+2025-11-04 21:03:44 - INFO - 127.0.0.1 - - [04/Nov/2025 21:03:44] "GET /logs HTTP/1.1" 200 -
+2025-11-04 21:05:10 - INFO -  * Detected change in '/Users/macbookair/Documents/project amsalamam/site/app.py', reloading
+2025-11-04 21:05:11 - INFO -  * Restarting with watchdog (fsevents)
+2025-11-04 21:05:28 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-11-04 21:05:28 - INFO - [33mPress CTRL+C to quit[0m
+2025-11-04 21:05:28 - INFO -  * Restarting with watchdog (fsevents)
+2025-11-04 21:05:28 - WARNING -  * Debugger is active!
+2025-11-04 21:05:28 - INFO -  * Debugger PIN: 823-802-455
+2025-11-04 21:05:30 - INFO - 127.0.0.1 - - [04/Nov/2025 21:05:30] "GET / HTTP/1.1" 200 -
+2025-11-04 21:05:33 - INFO - 127.0.0.1 - - [04/Nov/2025 21:05:33] "GET /logs HTTP/1.1" 200 -
+2025-11-04 21:20:14 - INFO - 127.0.0.1 - - [04/Nov/2025 21:20:14] "GET / HTTP/1.1" 200 -
+2025-11-04 21:20:24 - INFO - 127.0.0.1 - - [04/Nov/2025 21:20:24] "GET /logs HTTP/1.1" 200 -
+2025-11-04 21:23:53 - INFO - 127.0.0.1 - - [04/Nov/2025 21:23:53] "GET / HTTP/1.1" 200 -
+2025-11-04 21:23:53 - INFO - 127.0.0.1 - - [04/Nov/2025 21:23:53] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-11-04 21:25:33 - INFO - 127.0.0.1 - - [04/Nov/2025 21:25:33] "GET / HTTP/1.1" 200 -
+2025-11-04 21:25:33 - INFO - 127.0.0.1 - - [04/Nov/2025 21:25:33] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-11-04 21:28:24 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:24] "GET / HTTP/1.1" 200 -
+2025-11-04 21:28:24 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:24] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-11-04 21:28:26 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:26] "GET / HTTP/1.1" 200 -
+2025-11-04 21:28:26 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:26] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-11-04 21:28:28 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:28] "GET / HTTP/1.1" 200 -
+2025-11-04 21:28:28 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:28] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-11-04 21:28:30 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:30] "GET /logs HTTP/1.1" 200 -
+2025-11-04 21:28:50 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:50] "GET / HTTP/1.1" 200 -
+2025-11-04 21:28:50 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:50] "GET /static/logo.png HTTP/1.1" 200 -
+2025-11-04 21:28:53 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:53] "GET / HTTP/1.1" 200 -
+2025-11-04 21:28:53 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:53] "[36mGET /static/logo.png HTTP/1.1[0m" 304 -
+2025-11-04 21:28:54 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:54] "GET / HTTP/1.1" 200 -
+2025-11-04 21:28:54 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:54] "[36mGET /static/logo.png HTTP/1.1[0m" 304 -
+2025-11-04 21:28:54 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:54] "GET / HTTP/1.1" 200 -
+2025-11-04 21:28:54 - INFO - 127.0.0.1 - - [04/Nov/2025 21:28:54] "[36mGET /static/logo.png HTTP/1.1[0m" 304 -
