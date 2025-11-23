@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title id="page-title">EcoImpact AI - Assessment</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* All CSS from the previous correct version */
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap');
+        body { --c-glass: #bbbbbc; --c-light: #fff; --c-dark: #000; --c-content: #224; --c-action: #0052f5; --c-bg: #E8E8E9; --glass-reflex-dark: 1; --glass-reflex-light: 1; --saturation: 150%; font-size: 20px; font-family: "DM Sans", sans-serif; font-optical-sizing: auto; background: var(--c-bg); color: var(--c-content); transition: background 400ms cubic-bezier(1, 0.0, 0.4, 1), color 400ms cubic-bezier(1, 0.0, 0.4, 1); }
+        body:has(input[value="dark"]:checked) { --c-content: #e1e1e1; --c-action: #03d5ff; --c-bg: #1b1b1d; --glass-reflex-dark: 2; --glass-reflex-light: 0.3; --saturation: 150%; }
+        body:has(input[value="dim"]:checked) { --c-light: #99deff; --c-dark: #20001b; --c-glass: hsl(335 250% 74% / 1); --c-content: #d5dbe2; --c-action: #ff48a9; --c-bg: #152433; --glass-reflex-dark: 2; --glass-reflex-light: 0.7; --saturation: 200%; }
+        .switcher { position: fixed; z-index: 1000; top: 40px; left: 50%; translate: -50%; display: flex; align-items: center; gap: 8px; width: 244px; height: 70px; box-sizing: border-box; padding: 8px 12px 10px; margin: 0 auto; border: none; border-radius: 99em; background-color: color-mix(in srgb, var(--c-glass) 12%, transparent); backdrop-filter: blur(8px) url(#switcher-blur) saturate(var(--saturation)); -webkit-backdrop-filter: blur(8px) saturate(var(--saturation)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent), inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent); transition: background-color 400ms cubic-bezier(1, 0.0, 0.4, 1), box-shadow 400ms cubic-bezier(1, 0.0, 0.4, 1); }
+        .switcher__legend, .switcher__input { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border-width: 0; }
+        .switcher__icon { display: block; width: 100%; transition: scale 200ms cubic-bezier(0.5, 0, 0, 1); }
+        .switcher__filter { position: absolute; width: 0; height: 0; z-index: -1; }
+        .switcher__option { --c: var(--c-content); display: flex; justify-content: center; align-items: center; padding: 0 16px; width: 68px; height: 100%; box-sizing: border-box; border-radius: 99em; opacity: 1; transition: all 160ms; }
+        .switcher__option:hover { --c: var(--c-action); cursor: pointer; } .switcher__option:hover .switcher__icon { scale: 1.2; }
+        .switcher__option:has(input:checked) { --c: var(--c-content); cursor: auto; } .switcher__option:has(input:checked) .switcher__icon { scale: 1; }
+        .switcher::after { content: ''; position: absolute; left: 4px; top: 4px; display: block; width: 84px; height: calc(100% - 10px); border-radius: 99em; background-color: color-mix(in srgb, var(--c-glass) 36%, transparent); z-index: -1; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent), inset 2px 1px 0px -1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), inset -1.5px -1px 0px -1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), inset -2px -6px 1px -5px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), inset -1px 2px 3px -1px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), inset 0px -4px 1px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 0px 3px 6px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent); }
+        .switcher:has(input[c-option="1"]:checked)::after { translate: 0 0; transform-origin: right; transition: background-color 400ms cubic-bezier(1, 0.0, 0.4, 1), box-shadow 400ms cubic-bezier(1, 0.0, 0.4, 1), translate 400ms cubic-bezier(1, 0.0, 0.4, 1); animation: scaleToggle 440ms ease; }
+        .switcher:has(input[c-option="2"]:checked)::after { translate: 76px 0; transition: background-color 400ms cubic-bezier(1, 0.0, 0.4, 1), box-shadow 400ms cubic-bezier(1, 0.0, 0.4, 1), translate 400ms cubic-bezier(1, 0.0, 0.4, 1); animation: scaleToggle2 440ms ease; }
+        .switcher[c-previous="1"]:has(input[c-option="2"]:checked)::after { transform-origin: left; } .switcher[c-previous="3"]:has(input[c-option="2"]:checked)::after { transform-origin: right; }
+        .switcher:has(input[c-option="3"]:checked)::after { translate: 152px 0; transform-origin: left; transition: background-color 400ms cubic-bezier(1, 0.0, 0.4, 1), box-shadow 400ms cubic-bezier(1, 0.0, 0.4, 1), translate 400ms cubic-bezier(1, 0.0, 0.4, 1); animation: scaleToggle3 440ms ease; }
+        @keyframes scaleToggle { 0% { scale: 1 1; } 50% { scale: 1.1 1; } 100% { scale: 1 1; } } @keyframes scaleToggle2 { 0% { scale: 1 1; } 50% { scale: 1.2 1; } 100% { scale: 1 1; } } @keyframes scaleToggle3 { 0% { scale: 1 1; } 50% { scale: 1.1 1; } 100% { scale: 1 1; } }
+        body { overflow-x: hidden; min-height: 100vh; padding: 2rem; margin: 0; }
+        h1, h2 { color: var(--c-content); margin: 1.4em 0 0.6em; width: 100%; max-width: 600px; box-sizing: border-box; border-bottom: 2px solid color-mix(in srgb, var(--c-content) 50%, transparent); padding-bottom: 0.625rem; }
+        h1 { font-size: 3em; } h2 { font-size: 2em; }
+        :root { --font-size-min: 16; --font-size-max: 20; --font-ratio-min: 1.2; --font-ratio-max: 1.33; --font-width-min: 375; --font-width-max: 1500; --content-width: 720px; }
+        :where(.fluid) { --fluid-min: calc( var(--font-size-min) * pow(var(--font-ratio-min), var(--font-level, 0)) ); --fluid-max: calc( var(--font-size-max) * pow(var(--font-ratio-max), var(--font-level, 0)) ); --fluid-preferred: calc( (var(--fluid-max) - var(--fluid-min)) / (var(--font-width-max) - var(--font-width-min)) ); --fluid-type: clamp( (var(--fluid-min) / 16) * 1rem, ((var(--fluid-min) / 16) * 1rem) - (((var(--fluid-preferred) * var(--font-width-min)) / 16) * 1rem) + (var(--fluid-preferred) * var(--variable-unit, 100vi)), (var(--fluid-max) / 16) * 1rem ); font-size: var(--fluid-type); }
+        *, *:after, *:before { box-sizing: border-box; }
+        body::before { --size: 45px; --line: color-mix(in hsl, var(--c-content), transparent 80%); content: ''; height: 100vh; width: 100vw; position: fixed; background: linear-gradient( 90deg, var(--line) 1px, transparent 1px var(--size) ) calc(var(--size) * 0.36) 50% / var(--size) var(--size), linear-gradient(var(--line) 1px, transparent 1px var(--size)) 0% calc(var(--size) * 0.32) / var(--size) var(--size); mask: linear-gradient(-20deg, transparent 50%, var(--c-light)); top: 0; transform-style: flat; pointer-events: none; z-index: -1; }
+        .container { width: var(--content-width); max-width: calc(100vw - 4rem); margin: 120px auto 12rem; }
+        .glass-card { background: color-mix(in srgb, var(--c-glass) 12%, transparent); backdrop-filter: saturate(var(--saturation)) blur(10px); border-radius: 12px; padding: 2rem; box-shadow: 0 0 2px 1px color-mix(in srgb, var(--c-dark) 50%, transparent) inset, 0 0 10px 4px color-mix(in srgb, var(--c-dark) 30%, transparent) inset, 0px 4px 16px color-mix(in srgb, var(--c-dark) 5%, transparent), 0px 8px 24px color-mix(in srgb, var(--c-dark) 5%, transparent), 0px 16px 56px color-mix(in srgb, var(--c-dark) 5%, transparent); animation: fadeIn 0.5s ease-out; color: var(--c-content); border: 1px solid color-mix(in srgb, var(--c-light) 50%, transparent); }
+        .form-group { margin-bottom: 1.25rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--c-content); }
+        input[type="number"], input[type="text"], select { width: 100%; padding: 0.75rem; box-sizing: border-box; border: 1px solid color-mix(in srgb, var(--c-content) 50%, transparent); border-radius: 0.625rem; background: color-mix(in srgb, var(--c-bg) 50%, transparent); color: var(--c-content); font-size: 1rem; transition: background 0.3s, border-color 0.3s; }
+        input[type="number"]:focus, input[type="text"]:focus, select:focus { outline: none; background: color-mix(in srgb, var(--c-bg) 70%, transparent); border-color: var(--c-action); }
+        input.invalid { border-color: #ff6b6b; }
+        input[type="number"]::placeholder, input[type="text"]::placeholder { color: color-mix(in srgb, var(--c-content) 50%, transparent); }
+        button { padding: 0.75rem 1.56rem; background: var(--c-action); color: var(--c-light); border: none; border-radius: 0.625rem; cursor: pointer; font-size: 1rem; font-weight: bold; margin-right: 0.94rem; transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s; box-shadow: 0 4px 15px color-mix(in srgb, var(--c-dark) 50%, transparent); }
+        button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px color-mix(in srgb, var(--c-dark) 70%, transparent); }
+        button:disabled { background: color-mix(in srgb, var(--c-content) 50%, transparent); cursor: not-allowed; transform: none; box-shadow: none; }
+        .log-button, .search-button, .pdf-button { background: color-mix(in srgb, var(--c-action) 70%, var(--c-bg)); color: var(--c-content); }
+        .error { color: #ff6b6b; background: color-mix(in srgb, #ff6b6b, var(--c-bg) 80%); padding: 0.94rem; border-radius: 0.625rem; margin-top: 1.25rem; border: 1px solid color-mix(in srgb, #ff6b6b, var(--c-bg) 70%); animation: fadeIn 0.5s ease-out; }
+        .result { margin-top: 1.56rem; padding: 1.25rem; background: color-mix(in srgb, #2ecc71, var(--c-bg) 80%); border: 1px solid color-mix(in srgb, #2ecc71, var(--c-bg) 70%); border-radius: 0.94rem; animation: fadeIn 0.5s ease-out; color: var(--c-content); }
+        .result h3 { margin-top: 0; color: var(--c-content); } .result pre { color: var(--c-content); background: color-mix(in srgb, var(--c-bg) 90%, transparent); padding: 0.94rem; border-radius: 0.625rem; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        .dock-icon { width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; transition: transform 0.2s ease-out; text-decoration: none; }
+        .dock-icon:hover { transform: scale(1.2); }
+        .dock-icon img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
+        .dock-separator { width: 1px; height: 40px; background-color: color-mix(in srgb, var(--c-light) 30%, transparent); margin: 0 10px; }
+        .lang-icon { font-size: 2.5rem; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .dock { position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: center; align-items: center; gap: 15px; padding: 10px; z-index: 1000; background: color-mix(in srgb, var(--c-light) 8%, transparent); -webkit-backdrop-filter: url(#frosted-glass); backdrop-filter: url(#frosted-glass); border: none; border-top: 2px solid color-mix(in srgb, var(--c-light) 60%, transparent); box-shadow: 0 -16px 32px color-mix(in srgb, var(--c-dark) 12%, transparent); }
+        .wizard-step { display: none; animation: fadeIn 0.5s ease-out; }
+        .wizard-progress { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
+        .wizard-progress-step { width: 20px; height: 20px; border-radius: 50%; background: color-mix(in srgb, var(--c-action) 20%, transparent); transition: background-color 0.3s, transform 0.3s; }
+        .wizard-progress-step.active { background: var(--c-action); transform: scale(1.2); }
+        .wizard-progress-step.finish { background: color-mix(in srgb, #2ecc71, var(--c-bg) 10%); }
+        .wizard-navigation { margin-top: 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .chart-container { position: relative; margin: 2rem auto; height: 40vh; max-height: 450px; width: 100%; }
+    </style>
+</head>
+<body>
+    <form class="switcher" id="theme-switcher">
+        <legend class="switcher__legend">Theme Switcher</legend>
+        <div class="switcher__option">
+            <input type="radio" name="theme" id="light" value="light" checked c-option="1" class="switcher__input" />
+            <label for="light" onclick="setPrevious(1)"><svg class="switcher__icon" viewBox="0 0 24 24" fill="var(--c)"><path d="M12 2A10 10 0 0 0 2 12A10 10 0 0 0 12 22A10 10 0 0 0 22 12A10 10 0 0 0 12 2M12 4A8 8 0 0 1 20 12A8 8 0 0 1 12 20A8 8 0 0 1 4 12A8 8 0 0 1 12 4M12 6A6 6 0 0 0 6 12A6 6 0 0 0 12 18A6 6 0 0 0 18 12A6 6 0 0 0 12 6Z" fill="currentColor"/></svg></label>
+        </div>
+        <div class="switcher__option">
+            <input type="radio" name="theme" id="dark" value="dark" c-option="2" class="switcher__input" />
+            <label for="dark" onclick="setPrevious(2)"><svg class="switcher__icon" viewBox="0 0 24 24" fill="var(--c)"><path d="M12 2.25A9.75 9.75 0 0 0 2.25 12A9.75 9.75 0 0 0 12 21.75V2.25M12 4V20A8 8 0 0 0 20 12A8 8 0 0 0 12 4Z" fill="currentColor"/></svg></label>
+        </div>
+        <div class="switcher__option">
+            <input type="radio" name="theme" id="dim" value="dim" c-option="3" class="switcher__input" />
+            <label for="dim" onclick="setPrevious(3)"><svg class="switcher__icon" viewBox="0 0 24 24" fill="var(--c)"><path d="M12 2L9.19 8.62L2 9.27L7.54 14.1L5.82 21L12 17.27L18.18 21L16.46 14.1L22 9.27L14.81 8.62L12 2Z" fill="currentColor"/></svg></label>
+        </div>
+        <svg class="switcher__filter" width="0" height="0"><filter id="switcher-blur"><feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" /></filter></svg>
+    </form>
+    
+    <div class="container">
+        <h1 id="main-header" class="fluid" style="--font-level: 3;">EcoImpact AI - Environmental Impact Assessment</h1>
+        <div class="glass-card">
+            
+            <form method="POST" id="main-form">
+                <!-- Wizard Progress Bar -->
+                <div class="wizard-progress">
+                    <span class="wizard-progress-step"></span>
+                    <span class="wizard-progress-step"></span>
+                    <span class="wizard-progress-step"></span>
+                </div>
+
+                <!-- Step 1: Mining Details -->
+                <div class="form-section wizard-step">
+                    <h2 id="mining-details-header" class="fluid" style="--font-level: 2;">Mining Operation Details</h2>
+                    <div class="form-group"><label id="label-annual-production" for="annual_production_volume">Annual Production Volume (tons/year):</label><input type="number" step="any" name="annual_production_volume" required placeholder="e.g., 350000"></div>
+                    <div class="form-group"><label id="label-mining-depth" for="mining_depth">Mining Depth (meters):</label><input type="number" step="any" name="mining_depth" required placeholder="e.g., 450"></div>
+                    <div class="form-group"><label id="label-operation-years" for="operation_years">Operation Years:</label><input type="number" step="any" name="operation_years" required placeholder="e.g., 25"></div>
+                    <div class="form-group"><label id="label-mine-type" for="mine_type">Type of Mine:</label><select name="mine_type" required><option value="" disabled selected id="option-select">Select...</option><option value="Open-pit" id="option-open-pit">Open-pit</option><option value="Underground" id="option-underground">Underground</option><option value="Mixed" id="option-mixed">Mixed</option></select></div>
+                    <div class="form-group"><label id="label-mineral-type" for="primary_mineral_type">Primary Mineral Type:</label><select name="primary_mineral_type" required><option value="" disabled selected id="option-select-mineral">Select...</option><option value="Coal" id="option-coal">Coal</option><option value="Copper" id="option-copper">Copper</option><option value="Gold" id="option-gold">Gold</option><option value="Uranium" id="option-uranium">Uranium</option><option value="Iron" id="option-iron">Iron</option><option value="Zinc-Lead" id="option-zinc-lead">Zinc-Lead</option><option value="Polymetallic" id="option-polymetallic">Polymetallic</option></select></div>
+                </div>
+
+                <!-- Step 2: Geographic Parameters -->
+                <div class="form-section wizard-step">
+                    <h2 id="geo-params-header" class="fluid" style="--font-level: 2;">Geographic Parameters</h2>
+                    <div class="form-group"><label id="label-distance-water" for="distance_to_water_body">Distance to Nearest Water Body (km):</label><input type="number" step="any" name="distance_to_water_body" required placeholder="e.g., 3.2"></div>
+                    <div class="form-group"><label id="label-elevation" for="elevation">Elevation (meters above sea level):</label><input type="number" step="any" name="elevation" required placeholder="e.g., 340"></div>
+                    <div class="form-group"><label id="label-precipitation" for="annual_precipitation">Annual Precipitation (mm/year):</label><input type="number" step="any" name="annual_precipitation" required placeholder="e.g., 120"></div>
+                    <div class="form-group"><label id="label-soil-type" for="soil_type">Soil Type:</label><select name="soil_type" required><option value="" disabled selected id="option-select-soil">Select...</option><option value="Sandy" id="option-sandy">Sandy</option><option value="Clay" id="option-clay">Clay</option><option value="Loam" id="option-loam">Loam</option><option value="Rocky" id="option-rocky">Rocky</option><option value="Mountain" id="option-mountain">Mountain</option><option value="Desert" id="option-desert">Desert</option></select></div>
+                </div>
+
+                <!-- Step 3: Environmental Baseline -->
+                <div class="form-section wizard-step">
+                    <h2 id="env-baseline-header" class="fluid" style="--font-level: 2;">Environmental Baseline</h2>
+                    <div class="form-group"><label id="label-water-quality" for="baseline_water_quality">Baseline Water Quality (1-10):</label><input type="number" step="any" name="baseline_water_quality" min="1" max="10" required placeholder="e.g., 6.5"></div>
+                    <div class="form-group"><label id="label-air-quality" for="baseline_air_quality">Baseline Air Quality (1-10):</label><input type="number" step="any" name="baseline_air_quality" min="1" max="10" required placeholder="e.g., 7"></div>
+                    <div class="form-group"><label id="label-vegetation-ndvi" for="baseline_vegetation_ndvi">Baseline Vegetation NDVI (0-1):</label><input type="number" step="any" name="baseline_vegetation_ndvi" min="0" max="1" required placeholder="e.g., 0.45"></div>
+                </div>
+
+                <!-- Wizard Navigation -->
+                <div class="wizard-navigation">
+                    <div>
+                         <a href="{{ url_for('show_logs') }}"><button type="button" class="log-button" id="button-logs">View Logs</button></a>
+                    </div>
+                    <div>
+                        <button type="button" id="prevBtn" onclick="navigateWizard(-1)">Previous</button>
+                        <button type="button" id="nextBtn" onclick="navigateWizard(1)">Next</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="form-section" style="margin-top: 2rem; border-top: 1px solid color-mix(in srgb, var(--c-content) 20%, transparent); padding-top: 1rem;">
+                <h2 id="location-header" class="fluid" style="--font-level: 2;">Location Search</h2>
+                <div class="form-group">
+                    <label id="label-location-search" for="location-search">Location Name or Coordinates:</label>
+                    <input type="text" id="input-location-search" name="location_search" placeholder="e.g., Bingham Canyon Mine or 40.523, -112.151">
+                </div>
+                <button type="button" id="button-location-search" class="search-button" onclick="searchOnGoogleEarth()">Search on Google Earth</button>
+            </div>
+
+            {% if error %} <div class="error"><h3 id="error-header">Error:</h3><p>{{ error }}</p></div> {% endif %}
+            
+            {% if result_data %} 
+            <div class="result">
+                <h3 id="results-header">Analysis Results:</h3>
+                <div class="chart-container">
+                    <canvas id="riskChart"></canvas>
+                </div>
+                <pre>{{ result_data | tojson(indent=2) }}</pre>
+                <form action="{{ url_for('generate_report') }}" method="POST" style="margin-top: 1.5rem; text-align: right;">
+                    <input type="hidden" name="report_data" value="{{ result_data | tojson }}">
+                    <button type="submit" class="pdf-button" id="button-pdf">Download PDF Report</button>
+                </form>
+            </div>
+
+            <script>
+                (function() {
+                    const ctx = document.getElementById('riskChart').getContext('2d');
+                    const resultData = JSON.parse('{{ result_data | tojson | safe }}');
+                    const labels = resultData.risks.map(risk => risk.category);
+                    const scores = resultData.risks.map(risk => risk.score);
+                    const currentBodyStyles = getComputedStyle(document.body);
+                    const gridColor = currentBodyStyles.getPropertyValue('--c-content').trim() + '30';
+                    const textColor = currentBodyStyles.getPropertyValue('--c-content').trim();
+                    const pointColor = currentBodyStyles.getPropertyValue('--c-action').trim();
+                    const fillColor = pointColor + '4D';
+                    new Chart(ctx, {
+                        type: 'radar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Risk Score',
+                                data: scores,
+                                backgroundColor: fillColor, borderColor: pointColor, borderWidth: 2,
+                                pointBackgroundColor: pointColor, pointRadius: 5,
+                            }]
+                        },
+                        options: {
+                            responsive: true, maintainAspectRatio: false,
+                            scales: {
+                                r: {
+                                    angleLines: { color: gridColor }, grid: { color: gridColor },
+                                    pointLabels: { color: textColor, font: { size: 14 } },
+                                    ticks: { color: textColor, backdropColor: 'transparent', stepSize: 2, beginAtZero: true, max: 10 }
+                                }
+                            },
+                            plugins: { legend: { labels: { color: textColor } } }
+                        }
+                    });
+                })();
+            </script>
+            {% elif result_raw %}
+             <div class="result">
+                <h3 id="results-header">Analysis Results (Raw):</h3>
+                <pre>{{ result_raw }}</pre>
+            </div>
+            <script> localStorage.clear(); </script>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="dock">
+        <a href="/" class="dock-icon"><img src="{{ url_for('static', filename='logo.png') }}" alt="EcoImpact AI Logo"></a>
+        <div class="dock-separator"></div>
+        <a href="#" class="dock-icon lang-icon" onclick="changeLanguage('en')" aria-label="Switch to English">🇬🇧</a>
+        <a href="#" class="dock-icon lang-icon" onclick="changeLanguage('ru')" aria-label="Switch to Russian">🇷🇺</a>
+        <a href="#" class="dock-icon lang-icon" onclick="changeLanguage('kz')" aria-label="Switch to Kazakh">🇰🇿</a>
+        <a href="#" class="dock-icon lang-icon" onclick="changeLanguage('uz')" aria-label="Switch to Uzbek">🇺🇿</a>
+    </div>
+
+    <svg style="position: absolute; width: 0; height: 0; z-index: -1;">
+      <filter id="frosted-glass">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.05 0.01" numOctaves="2" result="turbulence"/>
+        <feDisplacementMap in="blur" in2="turbulence" scale="30" />
+      </filter>
+    </svg>
+
+    <script>
+        const translations = {
+             'en': { 'page-title': 'EcoImpact AI - Assessment', 'main-header': 'EcoImpact AI - Environmental Impact Assessment', 'location-header': 'Location Search', 'label-location-search': 'Location Name or Coordinates:', 'input-location-search': 'e.g., Bingham Canyon Mine or 40.523, -112.151', 'button-location-search': 'Search on Google Earth', 'mining-details-header': 'Mining Operation Details', 'label-annual-production': 'Annual Production Volume (tons/year):', 'label-mining-depth': 'Mining Depth (meters):', 'label-operation-years': 'Operation Years:', 'label-mine-type': 'Type of Mine:', 'option-select': 'Select...', 'option-open-pit': 'Open-pit', 'option-underground': 'Underground', 'option-mixed': 'Mixed', 'label-mineral-type': 'Primary Mineral Type:', 'option-select-mineral': 'Select...', 'option-coal': 'Coal', 'option-copper': 'Copper', 'option-gold': 'Gold', 'option-uranium': 'Uranium', 'option-iron': 'Iron', 'option-zinc-lead': 'Zinc-Lead', 'option-polymetallic': 'Polymetallic', 'geo-params-header': 'Geographic Parameters', 'label-distance-water': 'Distance to Nearest Water Body (km):', 'label-elevation': 'Elevation (meters above sea level):', 'label-precipitation': 'Annual Precipitation (mm/year):', 'label-soil-type': 'Soil Type:', 'option-select-soil': 'Select...', 'option-sandy': 'Sandy', 'option-clay': 'Clay', 'option-loam': 'Loam', 'option-rocky': 'Rocky', 'option-mountain': 'Mountain', 'option-desert': 'Desert', 'env-baseline-header': 'Environmental Baseline', 'label-water-quality': 'Baseline Water Quality (1-10):', 'label-air-quality': 'Baseline Air Quality (1-10):', 'label-vegetation-ndvi': 'Baseline Vegetation NDVI (0-1):', 'button-submit': 'Submit for Analysis', 'button-logs': 'View Logs', 'error-header': 'Error:', 'results-header': 'Analysis Results:', 'prevBtn': 'Previous', 'nextBtn': 'Next', 'button-pdf': 'Download PDF Report' },
+             'ru': { 'page-title': 'EcoImpact AI - Оценка', 'main-header': 'EcoImpact AI - Оценка Воздействия на Окружающую Среду', 'location-header': 'Поиск Местоположения', 'label-location-search': 'Название или координаты местоположения:', 'input-location-search': 'например, рудник Бингем-Каньон или 40.523, -112.151', 'button-location-search': 'Искать в Google Earth', 'mining-details-header': 'Детали Горнодобывающей Операции', 'label-annual-production': 'Годовой объем добычи (тонн/год):', 'label-mining-depth': 'Глубина добычи (метры):', 'label-operation-years': 'Годы эксплуатации:', 'label-mine-type': 'Тип рудника:', 'option-select': 'Выберите...', 'option-open-pit': 'Открытый', 'option-underground': 'Подземный', 'option-mixed': 'Смешанный', 'label-mineral-type': 'Основной тип минерала:', 'option-select-mineral': 'Выберите...', 'option-coal': 'Уголь', 'option-copper': 'Медь', 'option-gold': 'Золото', 'option-uranium': 'Уран', 'option-iron': 'Железо', 'option-zinc-lead': 'Цинк-свинец', 'option-polymetallic': 'Полиметаллический', 'geo-params-header': 'Географические Параметры', 'label-distance-water': 'Расстояние до ближайшего водоема (км):', 'label-elevation': 'Высота (метры над уровнем моря):', 'label-precipitation': 'Годовые осадки (мм/год):', 'label-soil-type': 'Тип почвы:', 'option-select-soil': 'Выберите...', 'option-sandy': 'Песчаная', 'option-clay': 'Глинистая', 'option-loam': 'Суглинок', 'option-rocky': 'Скалистая', 'option-mountain': 'Горная', 'option-desert': 'Пустынная', 'env-baseline-header': 'Исходные Экологические Данные', 'label-water-quality': 'Исходное качество воды (1-10):', 'label-air-quality': 'Исходное качество воздуха (1-10):', 'label-vegetation-ndvi': 'Исходный NDVI растительности (0-1):', 'button-submit': 'Отправить на анализ', 'button-logs': 'Посмотреть логи', 'error-header': 'Ошибка:', 'results-header': 'Результаты анализа:', 'prevBtn': 'Назад', 'nextBtn': 'Далее', 'button-pdf': 'Скачать PDF Отчет' },
+             'kz': { 'page-title': 'EcoImpact AI - Бағалау', 'main-header': 'EcoImpact AI - Қоршаған ортаға әсерді бағалау', 'location-header': 'Орналасқан жерді іздеу', 'label-location-search': 'Орынның атауы немесе координаттары:', 'input-location-search': 'мысалы, Бингем каньоны кеніші немесе 40.523, -112.151', 'button-location-search': 'Google Earth-тен іздеу', 'mining-details-header': 'Тау-кен өндіру операциясының мәліметтері', 'label-annual-production': 'Жылдық өндіріс көлемі (тонна/жыл):', 'label-mining-depth': 'Кен орнының тереңдігі (метр):', 'label-operation-years': 'Пайдалану жылдары:', 'label-mine-type': 'Кеніш түрі:', 'option-select': 'Таңдаңыз...', 'option-open-pit': 'Ашық', 'option-underground': 'Жерасты', 'option-mixed': 'Аралас', 'label-mineral-type': 'Негізгі минерал түрі:', 'option-select-mineral': 'Таңдаңыз...', 'option-coal': 'Көмір', 'option-copper': 'Мыс', 'option-gold': 'Алтын', 'option-uranium': 'Уран', 'option-iron': 'Темір', 'option-zinc-lead': 'Мырыш-қорғасын', 'option-polymetallic': 'Полиметалл', 'geo-params-header': 'Географиялық параметрлер', 'label-distance-water': 'Жақын су қоймасына дейінгі қашықтық (км):', 'label-elevation': 'Биіктік (теңіз деңгейінен метр):', 'label-precipitation': 'Жылдық жауын-шашын (мм/жыл):', 'label-soil-type': 'Топырақ түрі:', 'option-select-soil': 'Таңдаңыз...', 'option-sandy': 'Құмды', 'option-clay': 'Сазды', 'option-loam': 'Құмды саз', 'option-rocky': 'Тасты', 'option-mountain': 'Таулы', 'option-desert': 'Шөлді', 'env-baseline-header': 'Бастапқы экологилық деректер', 'label-water-quality': 'Судың бастапқы сапасы (1-10):', 'label-air-quality': 'Ауаның бастапқы сапасы (1-10):', 'label-vegetation-ndvi': 'Өсімдіктердің бастапқы NDVI (0-1):', 'button-submit': 'Талдауға жіберу', 'button-logs': 'Журналдарды көру', 'error-header': 'Қате:', 'results-header': 'Талдау нәтижелері:', 'prevBtn': 'Артқа', 'nextBtn': 'Келесі', 'button-pdf': 'PDF есебін жүктеп алу' },
+             'uz': { 'page-title': 'EcoImpact AI - Baholash', 'main-header': 'EcoImpact AI - Atrof-muhitga ta\'sirni baholash', 'location-header': 'Joylashuvni qidirish', 'label-location-search': 'Joy nomi yoki koordinatalari:', 'input-location-search': 'masalan, Bingham Canyon koni yoki 40.523, -112.151', 'button-location-search': 'Google Earth\'da qidirish', 'mining-details-header': 'Kon-chilik ishlari tafsilotlari', 'label-annual-production': 'Yillik ishlab chiqarish hajmi (tonna/yil):', 'label-mining-depth': 'Qazib olish chuqurligi (metr):', 'label-operation-years': 'Foydalanish yillari:', 'label-mine-type': 'Kon turi:', 'option-select': 'Tanlang...', 'option-open-pit': 'Ochiq usulda', 'option-underground': 'Yer osti', 'option-mixed': 'Aralash', 'label-mineral-type': 'Asosiy mineral turi:', 'option-select-mineral': 'Tanlang...', 'option-coal': 'Ko\'mir', 'option-copper': 'Mis', 'option-gold': 'Oltin', 'option-uranium': 'Uran', 'option-iron': 'Temir', 'option-zinc-lead': 'Rux-qo\'rg\'oshin', 'option-polymetallic': 'Polimetall', 'geo-params-header': 'Geografik parametrlar', 'label-distance-water': 'Eng yaqin suv havzasigacha bo\'lgan masofa (km):', 'label-elevation': 'Balandlik (dengiz sathidan metr):', 'label-precipitation': 'Yillik yog\'ingarchilik (mm/yil):', 'label-soil-type': 'Tuproq turi:', 'option-select-soil': 'Tanlang...', 'option-sandy': 'Qumli', 'option-clay': 'Gilli', 'option-loam': 'Qumloq', 'option-rocky': 'Toshloq', 'option-mountain': 'Tog\'li', 'option-desert': 'Cho\'l', 'env-baseline-header': 'Boshlang\'ich ekologik ma\'lumotlar', 'label-water-quality': 'Suvning boshlang\'ich sifati (1-10):', 'label-air-quality': 'Havoning boshlang\'ich sifati (1-10):', 'label-vegetation-ndvi': 'O\'simliklarning boshlang\'ich NDVI (0-1):', 'button-submit': 'Tahlilga yuborish', 'button-logs': 'Jurnallarni ko\'rish', 'error-header': 'Xato:', 'results-header': 'Tahlil natijalari:', 'prevBtn': 'Orqaga', 'nextBtn': 'Keyingi', 'button-pdf': 'PDF Hisobotni Yuklab Olish' }
+        };
+
+        function changeLanguage(lang) {
+            const langTranslations = translations[lang] || translations['en'];
+            if (!langTranslations) return;
+            localStorage.setItem('userLanguage', lang);
+            Object.keys(langTranslations).forEach(id => {
+                const element = document.getElementById(id);
+                const translationText = langTranslations[id];
+                if (element) {
+                    if (element.tagName === 'INPUT') {
+                        if (element.type === 'submit' || element.type === 'button') { element.value = translationText; } else { element.placeholder = translationText; }
+                    } else if (element.tagName === 'BUTTON') { element.innerHTML = translationText; } else { element.textContent = translationText; }
+                }
+            });
+            updateWizardButtons();
+        }
+
+        function searchOnGoogleEarth() {
+            const query = document.getElementById('input-location-search').value;
+            if (query) { const url = `https://earth.google.com/web/search/${encodeURIComponent(query)}`; window.open(url, '_blank'); } else { alert("Please enter a location or coordinates to search."); }
+        }
+
+        function setPrevious(option) { document.getElementById('theme-switcher').setAttribute('c-previous', option); }
+
+        function setupFormListeners() {
+            const form = document.getElementById('main-form');
+            form.addEventListener('input', () => {
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                localStorage.setItem('formState', JSON.stringify(data));
+            });
+        }
+
+        function loadFormState() {
+            const savedState = localStorage.getItem('formState');
+            if (savedState) {
+                const data = JSON.parse(savedState);
+                for (const key in data) {
+                    if (document.getElementsByName(key)[0]) { document.getElementsByName(key)[0].value = data[key]; }
+                }
+            }
+        }
+
+        let currentStep = 0; let formSteps;
+
+        function showStep(stepIndex) {
+            formSteps.forEach((step, index) => { step.style.display = (index === stepIndex) ? "block" : "none"; });
+            updateWizardProgress(stepIndex);
+            updateWizardButtons();
+        }
+
+        function navigateWizard(n) {
+            if (n > 0 && !validateStep()) { return false; }
+            formSteps[currentStep].style.display = "none";
+            currentStep += n;
+            if (currentStep >= formSteps.length) { document.getElementById("main-form").submit(); return false; }
+            showStep(currentStep);
+        }
+
+        function validateStep() {
+            let valid = true;
+            const currentStepFields = formSteps[currentStep].querySelectorAll("input[required], select[required]");
+            currentStepFields.forEach(field => {
+                if (!field.value) { valid = false; field.classList.add("invalid"); } else { field.classList.remove("invalid"); }
+            });
+            return valid;
+        }
+
+        function updateWizardProgress(stepIndex) {
+            const progressSteps = document.querySelectorAll(".wizard-progress-step");
+            progressSteps.forEach((step, index) => {
+                step.classList.remove("active", "finish");
+                if (index < stepIndex) { step.classList.add("finish"); } else if (index === stepIndex) { step.classList.add("active"); }
+            });
+        }
+        
+        function updateWizardButtons() {
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+            const lang = localStorage.getItem('userLanguage') || 'en';
+            const langTranslations = translations[lang] || translations['en'];
+            prevBtn.style.display = currentStep === 0 ? "none" : "inline-block";
+            if (currentStep === formSteps.length - 1) {
+                nextBtn.innerHTML = langTranslations['button-submit'] || 'Submit for Analysis';
+                nextBtn.type = 'submit';
+            } else {
+                nextBtn.innerHTML = langTranslations['nextBtn'] || 'Next';
+                nextBtn.type = 'button';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const switcher = document.getElementById('theme-switcher');
+            const checkedInput = switcher.querySelector('input:checked');
+            setPrevious(checkedInput.getAttribute('c-option'));
+            document.querySelectorAll('.switcher__input').forEach(input => {
+                input.addEventListener('change', (e) => setPrevious(e.target.getAttribute('c-option')));
+            });
+            loadFormState();
+            setupFormListeners();
+            formSteps = document.querySelectorAll(".wizard-step");
+            showStep(currentStep);
+            const savedLang = localStorage.getItem('userLanguage') || 'en';
+            changeLanguage(savedLang);
+        });
+    </script>
+</body>
+</html>
