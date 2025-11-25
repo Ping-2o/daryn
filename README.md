@@ -52,17 +52,25 @@ Our AI model provides comprehensive risk scores and detailed reports to help env
 graph TB
     A[User Input] --> B[Flask Web App]
     B --> C[Data Processing]
-    C --> D[AI Model (LM Studio)]
+    C --> D[AI Model - LM Studio]
     D --> E[Risk Analysis]
     E --> F[JSON Response]
     F --> G[Web Display]
     F --> H[PDF Report]
     
-    subgraph "AI Analysis"
-    D --> I[Water Risk]
-    D --> J[Air Quality]
-    D --> K[Biodiversity]
+    subgraph Analysis["AI Analysis Categories"]
+        I[Water Risk Assessment]
+        J[Air Quality Analysis]
+        K[Biodiversity Impact]
     end
+    
+    D --> Analysis
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style D fill:#fff3e0
+    style F fill:#e8f5e8
+    style H fill:#fce4ec
 ```
 
 ### 🚀 Quick Start
