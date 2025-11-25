@@ -516,16 +516,6 @@ pie title Code Distribution by Language
     "Configuration" : 5
 ```
 
-### Performance Metrics
-```mermaid
-%%{init: {'theme':'dark', 'themeVariables': {'xyChart': {'backgroundColor': '#1a1a1a', 'titleColor': '#ffffff', 'xAxisTitleColor': '#ffffff', 'xAxisLabelColor': '#ffffff', 'yAxisTitleColor': '#ffffff', 'yAxisLabelColor': '#ffffff', 'plotColorPalette': '#ffffff,#cccccc,#999999,#666666,#333333'}}}%%
-xychart-beta
-    title "System Performance Analysis"
-    x-axis ["Response Time", "Accuracy", "User Satisfaction", "Processing Speed", "Reliability"]
-    y-axis "Performance Score (%)" 0 --> 100
-    bar [85, 92, 88, 78, 95]
-```
-
 ### Technology Stack Usage
 ```mermaid
 %%{init: {'theme':'dark', 'themeVariables': {'primaryColor':'#1a1a1a','primaryTextColor':'#ffffff','primaryBorderColor':'#ffffff','lineColor':'#ffffff','secondaryColor':'#2d2d2d','tertiaryColor':'#404040','background':'#1a1a1a','mainBkg':'#1a1a1a','secondBkg':'#2d2d2d','tertiaryBkg':'#404040'}}}%%
