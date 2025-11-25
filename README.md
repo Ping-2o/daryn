@@ -367,7 +367,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### 📖 О проекте
 
-**ЭкоВлияние ИИ** — это инновационное веб-приложение, разработанное учениками 9 класса для конкурса проектов. Наш инструмент использует искусственный интеллект для оценки воздействия горнодобывающих операций и проектов разработки минеральных ресурсов на окружающую среду.
+**EcoImpact AI** — это инновационное веб-приложение, разработанное учениками 9 класса для конкурса проектов. Наш инструмент использует искусственный интеллект для оценки воздействия горнодобывающих операций и проектов разработки минеральных ресурсов на окружающую среду.
 
 Приложение анализирует различные факторы, такие как:
 - 💧 **Риски загрязнения воды**
@@ -484,17 +484,17 @@ gantt
     title EcoImpact AI Development Timeline
     dateFormat YYYY-MM-DD
     section Planning
-        Project Concept    :2024-01-15, 2024-01-30
-        Research Phase     :2024-01-20, 2024-02-10
+        Project Concept    :2025-09-10, 2025-09-14
+        Research Phase     :2025-09-14, 2025-11-20
     section Development
-        Backend Setup      :2024-02-01, 2024-02-15
-        AI Integration     :2024-02-10, 2024-03-01
-        Frontend Design    :2024-02-15, 2024-03-05
-        Testing Phase      :2024-03-01, 2024-03-15
+        Backend Setup      :2025-10-15, 2025-10-30
+        AI Integration     :2025-10-16, 2025-10-30
+        Frontend Design    :2025-10-25, 2025-11-10
+        Testing Phase      :2025-11-10, 2025-11-25
     section Documentation
-        User Manual        :2024-03-10, 2024-03-20
-        README Creation    :2024-03-15, 2024-03-25
-        Final Presentation :2024-03-20, 2024-03-30
+        Project title page :2025-11-10, 2025-11-20
+        README Creation    :2025-11-24, 2025-11-25
+        Final Presentation :2025-11-22, 2025-11-25
 ```
 
 ### Performance Metrics
@@ -542,12 +542,11 @@ graph TB
 
 | Metric | Value | Details |
 |--------|-------|---------|
-| **📝 Lines of Code** | ~1,200+ | Well-structured and documented |
 | **🌐 Languages** | 4 | Python, HTML, CSS, JavaScript |
 | **📦 Dependencies** | 8 | Flask, WeasyPrint, Requests, etc. |
-| **⏱️ Development Time** | 3 months | Full academic semester project |
-| **👥 Team Size** | 2-4 students | 9th grade high school team |
-| **🎯 Target Audience** | Environmental engineers, researchers, students |
+| **⏱️ Development Time** | 1 months | Full academic semester project |
+| **👥 Team Size** | 2 students | 9th grade high school team |
+| **🎯 Target Audience** | Environmental engineers, researchers, analytics |
 | **🔧 Features** | 6 major | AI analysis, PDF reports, web interface, etc. |
 | **📊 Risk Categories** | 5 types | Water, Air, Biodiversity, Soil, Noise |
 | **🧪 Test Cases** | 20+ | Comprehensive testing scenarios |
