@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title id="page-title">EcoImpact AI - Assessment</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         /* All CSS from the previous correct version */
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap');
@@ -59,6 +61,20 @@
         .wizard-progress-step.finish { background: color-mix(in srgb, #2ecc71, var(--c-bg) 10%); }
         .wizard-navigation { margin-top: 2rem; display: flex; justify-content: space-between; align-items: center; }
         .chart-container { position: relative; margin: 2rem auto; height: 40vh; max-height: 450px; width: 100%; }
+        /* Custom Map Marker Styles */
+        .custom-marker { background: transparent !important; border: none !important; }
+        .leaflet-popup-content-wrapper { border-radius: 8px; }
+        .leaflet-popup-content { margin: 12px; }
+        
+        @media (max-width: 768px) {
+            .result > div[style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+            }
+            .chart-container { height: 50vh; max-height: 400px; }
+            .chart-container h4 { font-size: 1rem !important; }
+            .chart-container button { font-size: 0.75rem !important; padding: 0.3rem 0.6rem !important; }
+            #siteMap { height: 300px !important; }
+        }
     </style>
 </head>
 <body>
@@ -94,6 +110,16 @@
                 <!-- Step 1: Mining Details -->
                 <div class="form-section wizard-step">
                     <h2 id="mining-details-header" class="fluid" style="--font-level: 2;">Mining Operation Details</h2>
+                    <div class="form-group">
+                        <label id="label-location-search-form" for="location_search">Location (Name or Coordinates): <span style="color: #c0392b;">*</span></label>
+                        <div style="display: flex; gap: 0.5rem; align-items: start;">
+                            <input type="text" id="input-location-search-form" name="location_search" required placeholder="e.g., 51.1655° N, 71.4272° E or Bingham Canyon Mine" style="flex: 1;">
+                            <button type="button" class="search-button" onclick="searchOnGoogleEarth()" style="margin: 0; white-space: nowrap;">🌍 Google Earth</button>
+                        </div>
+                        <small style="color: var(--c-content); opacity: 0.7; font-size: 0.8rem; display: block; margin-top: 0.25rem;">
+                            💡 Formats: "51.1655° N, 71.4272° E" • "40.5236, -112.1520" • "Sydney, Australia"
+                        </small>
+                    </div>
                     <div class="form-group"><label id="label-annual-production" for="annual_production_volume">Annual Production Volume (tons/year):</label><input type="number" step="any" name="annual_production_volume" required placeholder="e.g., 350000"></div>
                     <div class="form-group"><label id="label-mining-depth" for="mining_depth">Mining Depth (meters):</label><input type="number" step="any" name="mining_depth" required placeholder="e.g., 450"></div>
                     <div class="form-group"><label id="label-operation-years" for="operation_years">Operation Years:</label><input type="number" step="any" name="operation_years" required placeholder="e.g., 25"></div>
@@ -130,64 +156,640 @@
                 </div>
             </form>
 
-            <div class="form-section" style="margin-top: 2rem; border-top: 1px solid color-mix(in srgb, var(--c-content) 20%, transparent); padding-top: 1rem;">
-                <h2 id="location-header" class="fluid" style="--font-level: 2;">Location Search</h2>
-                <div class="form-group">
-                    <label id="label-location-search" for="location-search">Location Name or Coordinates:</label>
-                    <input type="text" id="input-location-search" name="location_search" placeholder="e.g., Bingham Canyon Mine or 40.523, -112.151">
-                </div>
-                <button type="button" id="button-location-search" class="search-button" onclick="searchOnGoogleEarth()">Search on Google Earth</button>
-            </div>
 
             {% if error %} <div class="error"><h3 id="error-header">Error:</h3><p>{{ error }}</p></div> {% endif %}
             
             {% if result_data %} 
             <div class="result">
                 <h3 id="results-header">Analysis Results:</h3>
-                <div class="chart-container">
-                    <canvas id="riskChart"></canvas>
+                
+                <!-- Charts Section -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+                    <div class="chart-container">
+                        <h4 style="text-align: center; color: var(--c-content); margin-bottom: 1rem;">Risk Distribution</h4>
+                        <canvas id="riskRadarChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h4 style="text-align: center; color: var(--c-content); margin-bottom: 1rem;">Category Risk Levels</h4>
+                        <canvas id="riskBarChart"></canvas>
+                    </div>
                 </div>
-                <pre>{{ result_data | tojson(indent=2) }}</pre>
+                
+                <!-- Additional Charts Section -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+                    <div class="chart-container" style="height: 35vh;">
+                        <h4 style="text-align: center; color: var(--c-content); margin-bottom: 1rem;">Risk Proportion</h4>
+                        <canvas id="riskPieChart"></canvas>
+                    </div>
+                    <div class="chart-container" style="height: 35vh;">
+                        <h4 style="text-align: center; color: var(--c-content); margin-bottom: 1rem;">Risk Comparison</h4>
+                        <canvas id="riskDoughnutChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Interactive Map Section -->
+                <div style="margin: 2rem 0;">
+                    <h4 style="color: var(--c-content); margin-bottom: 1rem;">📍 Mining Site Location</h4>
+                    <div id="siteMap" style="height: 400px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--c-content); opacity: 0.7;">
+                        🗺️ Pin color indicates risk level: 
+                        <span style="color: #27ae60; font-weight: bold;">●</span> Low 
+                        <span style="color: #f39c12; font-weight: bold;">●</span> Moderate 
+                        <span style="color: #c0392b; font-weight: bold;">●</span> High
+                        <br>
+                        💡 <strong>Supported coordinate formats:</strong> "51.1655° N, 71.4272° E" • "40.5236, -112.1520" • "51.1655 N 71.4272 E"
+                        <br>
+                        💡 <strong>Or use location names:</strong> "Bingham Canyon Mine, Utah" • "Sydney, Australia"
+                    </p>
+                </div>
+                
+                <!-- Overall Risk Score Display -->
+                <div style="background: color-mix(in srgb, var(--c-bg) 70%, transparent); border-radius: 0.625rem; padding: 1.5rem; margin: 1.5rem 0; text-align: center;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: var(--c-content); font-size: 1.2rem;">Overall Environmental Risk Score</h4>
+                    <div style="font-size: 3rem; font-weight: bold; 
+                        {% if result_data.overall_risk_score < 4 %}color: #27ae60;
+                        {% elif result_data.overall_risk_score < 7 %}color: #f39c12;
+                        {% else %}color: #c0392b;{% endif %}">
+                        {{ result_data.overall_risk_score }}/10
+                    </div>
+                    <div style="font-size: 1rem; margin-top: 0.5rem; font-weight: bold; 
+                        {% if result_data.overall_risk_score < 4 %}color: #27ae60;
+                        {% elif result_data.overall_risk_score < 7 %}color: #f39c12;
+                        {% else %}color: #c0392b;{% endif %}">
+                        {% if result_data.overall_risk_score < 4 %}LOW RISK
+                        {% elif result_data.overall_risk_score < 7 %}MODERATE RISK
+                        {% else %}HIGH RISK{% endif %}
+                    </div>
+                </div>
+
+                <!-- Executive Summary -->
+                <div style="background: color-mix(in srgb, #3498db 10%, var(--c-bg) 90%); border-left: 4px solid #3498db; padding: 1rem; margin: 1.5rem 0; border-radius: 0.625rem;">
+                    <h4 style="margin: 0 0 0.75rem 0; color: var(--c-content);">Executive Summary</h4>
+                    <p style="margin: 0; line-height: 1.6; color: var(--c-content);">{{ result_data.summary }}</p>
+                </div>
+
+                <!-- Detailed Risk Breakdown -->
+                <div style="margin: 1.5rem 0;">
+                    <h4 style="color: var(--c-content); margin-bottom: 1rem;">Detailed Risk Breakdown</h4>
+                    {% for risk in result_data.risks %}
+                    <div style="background: color-mix(in srgb, var(--c-bg) 70%, transparent); border-radius: 0.625rem; padding: 1.25rem; margin-bottom: 1rem; border-left: 4px solid 
+                        {% if risk.score < 4 %}#27ae60{% elif risk.score < 7 %}#f39c12{% else %}#c0392b{% endif %};">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <h5 style="margin: 0; color: var(--c-content); font-size: 1.1rem;">{{ risk.category }}</h5>
+                            <span style="font-size: 1.5rem; font-weight: bold; 
+                                {% if risk.score < 4 %}color: #27ae60;
+                                {% elif risk.score < 7 %}color: #f39c12;
+                                {% else %}color: #c0392b;{% endif %}">
+                                {{ risk.score }}/10
+                            </span>
+                        </div>
+                        <p style="margin: 0; color: var(--c-content); line-height: 1.6;">{{ risk.details }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
                 <form action="{{ url_for('generate_report') }}" method="POST" style="margin-top: 1.5rem; text-align: right;">
-                    <input type="hidden" name="report_data" value="{{ result_data | tojson }}">
+                    <input type="hidden" name="report_data" value="{{ result_data | tojson | forceescape }}">
                     <button type="submit" class="pdf-button" id="button-pdf">Download PDF Report</button>
                 </form>
             </div>
 
             <script>
+                // Make resultData available globally for all chart and map functions
+                const resultData = JSON.parse('{{ result_data | tojson | safe }}');
+                
                 (function() {
-                    const ctx = document.getElementById('riskChart').getContext('2d');
-                    const resultData = JSON.parse('{{ result_data | tojson | safe }}');
                     const labels = resultData.risks.map(risk => risk.category);
                     const scores = resultData.risks.map(risk => risk.score);
+                    const details = resultData.risks.map(risk => risk.details);
+                    const overallScore = resultData.overall_risk_score;
+                    
                     const currentBodyStyles = getComputedStyle(document.body);
                     const gridColor = currentBodyStyles.getPropertyValue('--c-content').trim() + '30';
                     const textColor = currentBodyStyles.getPropertyValue('--c-content').trim();
                     const pointColor = currentBodyStyles.getPropertyValue('--c-action').trim();
                     const fillColor = pointColor + '4D';
-                    new Chart(ctx, {
+                    
+                    // Generate dynamic colors based on risk levels
+                    const backgroundColors = scores.map(score => {
+                        if (score < 4) return 'rgba(39, 174, 96, 0.6)'; // Green
+                        if (score < 7) return 'rgba(243, 156, 18, 0.6)'; // Orange
+                        return 'rgba(192, 57, 43, 0.6)'; // Red
+                    });
+                    
+                    const borderColors = scores.map(score => {
+                        if (score < 4) return 'rgba(39, 174, 96, 1)';
+                        if (score < 7) return 'rgba(243, 156, 18, 1)';
+                        return 'rgba(192, 57, 43, 1)';
+                    });
+                    
+                    // Radar Chart
+                    const ctxRadar = document.getElementById('riskRadarChart').getContext('2d');
+                    
+                    // Create wrapped labels for radar chart
+                    const radarLabels = labels.map(label => {
+                        if (label.includes('Water')) return ['Water', 'Contamination'];
+                        if (label.includes('Air')) return ['Air Quality', 'Degradation'];
+                        if (label.includes('Land')) return ['Land &', 'Biodiversity'];
+                        return label.split(' ');
+                    });
+                    
+                    new Chart(ctxRadar, {
                         type: 'radar',
                         data: {
-                            labels: labels,
+                            labels: radarLabels,
                             datasets: [{
-                                label: 'Risk Score',
+                                label: 'Risk Score (0-10)',
                                 data: scores,
-                                backgroundColor: fillColor, borderColor: pointColor, borderWidth: 2,
-                                pointBackgroundColor: pointColor, pointRadius: 5,
+                                backgroundColor: fillColor,
+                                borderColor: pointColor,
+                                borderWidth: 3,
+                                pointBackgroundColor: borderColors,
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: pointColor,
+                                pointRadius: 6,
+                                pointHoverRadius: 8,
                             }]
                         },
                         options: {
-                            responsive: true, maintainAspectRatio: false,
+                            responsive: true,
+                            maintainAspectRatio: false,
                             scales: {
                                 r: {
-                                    angleLines: { color: gridColor }, grid: { color: gridColor },
-                                    pointLabels: { color: textColor, font: { size: 14 } },
-                                    ticks: { color: textColor, backdropColor: 'transparent', stepSize: 2, beginAtZero: true, max: 10 }
+                                    angleLines: { color: gridColor },
+                                    grid: { color: gridColor },
+                                    pointLabels: { 
+                                        color: textColor, 
+                                        font: { size: 14, weight: 'bold' },
+                                        padding: 15
+                                    },
+                                    ticks: { 
+                                        color: textColor, 
+                                        backdropColor: 'transparent', 
+                                        stepSize: 2, 
+                                        beginAtZero: true, 
+                                        max: 10,
+                                        font: { size: 11 }
+                                    },
+                                    suggestedMin: 0,
+                                    suggestedMax: 10
                                 }
                             },
-                            plugins: { legend: { labels: { color: textColor } } }
+                            plugins: {
+                                legend: { 
+                                    display: true,
+                                    labels: { 
+                                        color: textColor,
+                                        font: { size: 12 }
+                                    } 
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                    titleColor: '#fff',
+                                    bodyColor: '#fff',
+                                    padding: 12,
+                                    displayColors: true,
+                                    callbacks: {
+                                        label: function(context) {
+                                            return context.dataset.label + ': ' + context.parsed.r + '/10';
+                                        },
+                                        afterLabel: function(context) {
+                                            const index = context.dataIndex;
+                                            const detail = details[index];
+                                            // Truncate long details for tooltip
+                                            return detail.length > 100 ? detail.substring(0, 100) + '...' : detail;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     });
+                    
+                    // Bar Chart
+                    const ctxBar = document.getElementById('riskBarChart').getContext('2d');
+                    new Chart(ctxBar, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Category Risk Score',
+                                data: scores,
+                                backgroundColor: backgroundColors,
+                                borderColor: borderColors,
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                borderSkipped: false,
+                            },
+                            {
+                                label: 'Overall Risk Score',
+                                data: Array(labels.length).fill(overallScore),
+                                backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                                borderColor: 'rgba(52, 152, 219, 1)',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                type: 'line',
+                                pointRadius: 0,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 10,
+                                    ticks: { 
+                                        color: textColor,
+                                        stepSize: 2,
+                                        font: { size: 11 }
+                                    },
+                                    grid: { color: gridColor },
+                                    title: {
+                                        display: true,
+                                        text: 'Risk Level (0-10)',
+                                        color: textColor,
+                                        font: { size: 12, weight: 'bold' }
+                                    }
+                                },
+                                x: {
+                                    ticks: { 
+                                        color: textColor,
+                                        font: { size: 10 },
+                                        maxRotation: 45,
+                                        minRotation: 45
+                                    },
+                                    grid: { display: false }
+                                }
+                            },
+                            plugins: {
+                                legend: { 
+                                    display: true,
+                                    labels: { 
+                                        color: textColor,
+                                        font: { size: 12 },
+                                        usePointStyle: true,
+                                        padding: 15
+                                    } 
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                    titleColor: '#fff',
+                                    bodyColor: '#fff',
+                                    padding: 12,
+                                    displayColors: true,
+                                    callbacks: {
+                                        label: function(context) {
+                                            if (context.dataset.label === 'Overall Risk Score') {
+                                                return 'Overall Risk: ' + context.parsed.y.toFixed(1) + '/10';
+                                            }
+                                            return context.dataset.label + ': ' + context.parsed.y + '/10';
+                                        },
+                                        afterLabel: function(context) {
+                                            if (context.dataset.label === 'Category Risk Score') {
+                                                const index = context.dataIndex;
+                                                const detail = details[index];
+                                                return detail.length > 150 ? detail.substring(0, 150) + '...' : detail;
+                                            }
+                                            return '';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    
+                    // Pie Chart - Risk Proportion
+                    const ctxPie = document.getElementById('riskPieChart').getContext('2d');
+                    
+                    // Create shorter labels for pie chart
+                    const shortLabels = labels.map(label => {
+                        if (label.includes('Water')) return 'Water';
+                        if (label.includes('Air')) return 'Air Quality';
+                        if (label.includes('Land')) return 'Land & Bio';
+                        return label;
+                    });
+                    
+                    new Chart(ctxPie, {
+                        type: 'pie',
+                        data: {
+                            labels: shortLabels,
+                            datasets: [{
+                                label: 'Risk Score',
+                                data: scores,
+                                backgroundColor: backgroundColors,
+                                borderColor: borderColors,
+                                borderWidth: 2,
+                                hoverOffset: 15
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            layout: {
+                                padding: 10
+                            },
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'right',
+                                    labels: {
+                                        color: textColor,
+                                        font: { size: 13, weight: '600' },
+                                        padding: 12,
+                                        usePointStyle: true,
+                                        boxWidth: 15,
+                                        boxHeight: 15,
+                                        generateLabels: function(chart) {
+                                            const data = chart.data;
+                                            if (data.labels.length && data.datasets.length) {
+                                                return data.labels.map((label, i) => {
+                                                    const value = data.datasets[0].data[i];
+                                                    const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                                    const percentage = ((value / total) * 100).toFixed(0);
+                                                    return {
+                                                        text: `${label}: ${percentage}%`,
+                                                        fillStyle: data.datasets[0].backgroundColor[i],
+                                                        hidden: false,
+                                                        index: i
+                                                    };
+                                                });
+                                            }
+                                            return [];
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                    titleColor: '#fff',
+                                    bodyColor: '#fff',
+                                    padding: 12,
+                                    displayColors: true,
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.parsed;
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = ((value / total) * 100).toFixed(1);
+                                            return `${label}: ${value}/10 (${percentage}%)`;
+                                        },
+                                        afterLabel: function(context) {
+                                            const index = context.dataIndex;
+                                            const detail = details[index];
+                                            return detail.length > 100 ? detail.substring(0, 100) + '...' : detail;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    
+                    // Doughnut Chart - Risk Comparison with Overall Score
+                    const ctxDoughnut = document.getElementById('riskDoughnutChart').getContext('2d');
+                    
+                    // Calculate average of category scores
+                    const avgCategoryScore = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2);
+                    const maxPossibleScore = 10;
+                    
+                    new Chart(ctxDoughnut, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Overall Risk', 'Remaining Safe Level'],
+                            datasets: [{
+                                label: 'Overall Assessment',
+                                data: [overallScore, maxPossibleScore - overallScore],
+                                backgroundColor: [
+                                    overallScore < 4 ? 'rgba(39, 174, 96, 0.8)' : 
+                                    overallScore < 7 ? 'rgba(243, 156, 18, 0.8)' : 
+                                    'rgba(192, 57, 43, 0.8)',
+                                    'rgba(149, 165, 166, 0.2)'
+                                ],
+                                borderColor: [
+                                    overallScore < 4 ? 'rgba(39, 174, 96, 1)' : 
+                                    overallScore < 7 ? 'rgba(243, 156, 18, 1)' : 
+                                    'rgba(192, 57, 43, 1)',
+                                    'rgba(149, 165, 166, 0.5)'
+                                ],
+                                borderWidth: 2,
+                                hoverOffset: 10
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '60%',
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'bottom',
+                                    labels: {
+                                        color: textColor,
+                                        font: { size: 11 },
+                                        padding: 15,
+                                        usePointStyle: true
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                    titleColor: '#fff',
+                                    bodyColor: '#fff',
+                                    padding: 12,
+                                    displayColors: true,
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.parsed;
+                                            const percentage = ((value / maxPossibleScore) * 100).toFixed(1);
+                                            return `${label}: ${value.toFixed(1)}/10 (${percentage}%)`;
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        plugins: [{
+                            id: 'centerText',
+                            beforeDraw: function(chart) {
+                                const width = chart.width;
+                                const height = chart.height;
+                                const ctx = chart.ctx;
+                                ctx.restore();
+                                const fontSize = (height / 180).toFixed(2);
+                                ctx.font = fontSize + "em sans-serif";
+                                ctx.textBaseline = "middle";
+                                ctx.fillStyle = textColor;
+                                
+                                const text = overallScore.toFixed(1);
+                                const textX = Math.round((width - ctx.measureText(text).width) / 2);
+                                const textY = height / 2 - 10;
+                                
+                                ctx.fillText(text, textX, textY);
+                                
+                                ctx.font = (fontSize * 0.5) + "em sans-serif";
+                                const subtext = "/10";
+                                const subtextX = Math.round((width - ctx.measureText(subtext).width) / 2);
+                                const subtextY = height / 2 + 15;
+                                ctx.fillText(subtext, subtextX, subtextY);
+                                
+                                ctx.save();
+                            }
+                        }]
+                    });
+                })();
+                
+                // Interactive Map Initialization
+                (function() {
+                    // Wait for Leaflet to be fully loaded
+                    if (typeof L === 'undefined') {
+                        console.error('Leaflet is not loaded');
+                        return;
+                    }
+                    
+                    // Get form data to extract location
+                    const formData = {{ form_data | tojson | safe if form_data else '{}' }};
+                    const overallScore = resultData.overall_risk_score;
+                    const locationSearch = formData.location_search || '';
+                    
+                    // Determine pin color based on risk score
+                    let pinColor = '#27ae60'; // Green (Low risk)
+                    if (overallScore >= 7) {
+                        pinColor = '#c0392b'; // Red (High risk)
+                    } else if (overallScore >= 4) {
+                        pinColor = '#f39c12'; // Orange (Moderate risk)
+                    }
+                    
+                    // Extract coordinates from location search
+                    let lat = 0, lon = 0;
+                    let locationName = locationSearch;
+                    
+                    // Try multiple coordinate formats:
+                    // 1. Simple: "40.5236, -112.1520"
+                    // 2. With degrees: "51.1655° N, 71.4272° E"
+                    // 3. With degrees without symbols: "51.1655 N, 71.4272 E"
+                    // 4. Space separated: "40.5236 -112.1520"
+                    
+                    let coordMatch = null;
+                    
+                    // Pattern 1: degrees with symbols like "51.1655° N, 71.4272° E"
+                    coordMatch = locationSearch.match(/(-?\d+\.?\d*)\s*°?\s*([NS])?\s*,?\s*(-?\d+\.?\d*)\s*°?\s*([EW])?/i);
+                    if (coordMatch) {
+                        lat = parseFloat(coordMatch[1]);
+                        lon = parseFloat(coordMatch[3]);
+                        
+                        // Handle N/S/E/W directions
+                        if (coordMatch[2] && coordMatch[2].toUpperCase() === 'S') lat = -lat;
+                        if (coordMatch[4] && coordMatch[4].toUpperCase() === 'W') lon = -lon;
+                        
+                        locationName = `${lat.toFixed(4)}°, ${lon.toFixed(4)}°`;
+                        console.log('Parsed coordinates:', lat, lon);
+                        initializeMap(lat, lon, locationName, pinColor, overallScore);
+                    } else {
+                        // Use Nominatim geocoding API to convert location name to coordinates
+                        console.log('Geocoding location:', locationSearch);
+                        
+                        // Nominatim requires a User-Agent header, use fetch with headers
+                        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationSearch)}&limit=1`, {
+                            headers: {
+                                'User-Agent': 'EcoImpactAI/1.0'
+                            }
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log('Geocoding response:', data);
+                                if (data && data.length > 0) {
+                                    lat = parseFloat(data[0].lat);
+                                    lon = parseFloat(data[0].lon);
+                                    locationName = data[0].display_name;
+                                    console.log('Geocoded successfully to:', lat, lon);
+                                } else {
+                                    // If geocoding fails, show alert and use world center
+                                    console.warn('Geocoding returned no results for:', locationSearch);
+                                    lat = 20;  // More visible default than 0,0
+                                    lon = 0;
+                                    locationName = `${locationSearch}`;
+                                    alert(`Location "${locationSearch}" could not be found. Please try:\n• Using coordinates (e.g., "40.5236, -112.1520")\n• A more specific location name (e.g., "Bingham Canyon Mine, Utah")\n\nShowing approximate world location instead.`);
+                                }
+                                initializeMap(lat, lon, locationName, pinColor, overallScore);
+                            })
+                            .catch(error => {
+                                console.error('Geocoding error:', error);
+                                lat = 20;
+                                lon = 0;
+                                locationName = `${locationSearch}`;
+                                alert(`Geocoding service error. Please try entering coordinates instead (e.g., "40.5236, -112.1520")`);
+                                initializeMap(lat, lon, locationName, pinColor, overallScore);
+                            });
+                        return; // Exit here since geocoding is async
+                    }
+                    
+                    // Function to initialize the map
+                    function initializeMap(lat, lon, locationName, pinColor, overallScore) {
+                        // Check if map container exists
+                        const mapContainer = document.getElementById('siteMap');
+                        if (!mapContainer) {
+                            console.error('Map container not found');
+                            return;
+                        }
+                        
+                        // Clear any existing map
+                        mapContainer.innerHTML = '';
+                        
+                        // Initialize the map
+                        const map = L.map('siteMap').setView([lat, lon], 10);
+                    
+                    // Add OpenStreetMap tiles
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors',
+                        maxZoom: 19
+                    }).addTo(map);
+                    
+                    // Create custom icon with dynamic color
+                    const customIcon = L.divIcon({
+                        className: 'custom-marker',
+                        html: `<div style="
+                            background: ${pinColor};
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 50% 50% 50% 0;
+                            transform: rotate(-45deg);
+                            border: 3px solid white;
+                            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+                        "></div>`,
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 30]
+                    });
+                    
+                    // Add marker to the map
+                    const marker = L.marker([lat, lon], { icon: customIcon }).addTo(map);
+                    
+                        // Create popup content
+                        const riskLevel = overallScore < 4 ? 'Low Risk' : overallScore < 7 ? 'Moderate Risk' : 'High Risk';
+                        const popupContent = `
+                            <div style="font-family: 'DM Sans', sans-serif; min-width: 200px;">
+                                <h4 style="margin: 0 0 0.5rem 0; color: ${pinColor}; font-size: 1.1rem;">Mining Site</h4>
+                                <p style="margin: 0.3rem 0; font-size: 0.9rem;"><strong>Overall Risk:</strong> ${overallScore}/10</p>
+                                <p style="margin: 0.3rem 0; font-size: 0.9rem;"><strong>Status:</strong> <span style="color: ${pinColor}; font-weight: bold;">${riskLevel}</span></p>
+                                <p style="margin: 0.3rem 0; font-size: 0.85rem; color: #666;"><strong>Location:</strong> ${locationName}</p>
+                                <p style="margin: 0.3rem 0; font-size: 0.85rem; color: #666;"><strong>Coordinates:</strong> ${lat.toFixed(4)}, ${lon.toFixed(4)}</p>
+                            </div>
+                        `;
+                        
+                        marker.bindPopup(popupContent).openPopup();
+                        
+                        // Add circle to show approximate impact area (radius based on risk)
+                        const impactRadius = (overallScore / 10) * 5000; // Max 5km radius
+                        L.circle([lat, lon], {
+                            color: pinColor,
+                            fillColor: pinColor,
+                            fillOpacity: 0.1,
+                            radius: impactRadius
+                        }).addTo(map).bindTooltip(`Impact radius: ~${(impactRadius/1000).toFixed(1)}km`);
+                    }
                 })();
             </script>
             {% elif result_raw %}
@@ -242,7 +844,7 @@
         }
 
         function searchOnGoogleEarth() {
-            const query = document.getElementById('input-location-search').value;
+            const query = document.getElementById('input-location-search-form').value;
             if (query) { const url = `https://earth.google.com/web/search/${encodeURIComponent(query)}`; window.open(url, '_blank'); } else { alert("Please enter a location or coordinates to search."); }
         }
 

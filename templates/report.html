@@ -39,8 +39,7 @@
             <div class="subtitle">EcoImpact AI Generated Report</div>
         </div>
         <div class="meta">
-            <strong>Location:</strong> {{ data.location_name }}<br>
-            <strong>Generated:</strong> {{ date_generated }}
+            <strong>Generated:</strong> {{ now.strftime('%B %d, %Y at %I:%M %p') }}
         </div>
     </div>
 

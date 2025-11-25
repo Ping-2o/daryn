@@ -30,53 +30,72 @@ def index():
 
             prompt_text = f"""
             As an expert environmental analyst, evaluate the following mining operation data.
-            Provide a comprehensive environmental impact assessment structured as a JSON object.
             
-            The JSON object must have the following exact structure:
+            CRITICAL: You must respond with ONLY a valid JSON object. Do not include any explanatory text, markdown formatting, or code blocks.
+            
+            The JSON object must have this EXACT structure:
             {{
-              "overall_risk_score": <A single number from 0.0 to 10.0 representing the total environmental risk. Higher is worse.>,
-              "summary": "<A 2-3 sentence executive summary of the primary risks.>",
+              "overall_risk_score": <number from 0.0 to 10.0>,
+              "summary": "<2-3 sentence executive summary>",
               "risks": [
-                {{ "category": "Water Contamination", "score": <A number from 0 to 10>, "details": "<A concise explanation...>" }},
-                {{ "category": "Air Quality Degradation", "score": <A number from 0 to 10>, "details": "<A concise explanation...>" }},
-                {{ "category": "Land & Biodiversity Impact", "score": <A number from 0 to 10>, "details": "<A concise explanation...>" }}
+                {{ "category": "Water Contamination", "score": <number 0-10>, "details": "<explanation>" }},
+                {{ "category": "Air Quality Degradation", "score": <number 0-10>, "details": "<explanation>" }},
+                {{ "category": "Land & Biodiversity Impact", "score": <number 0-10>, "details": "<explanation>" }}
               ]
             }}
 
-            Here is the data to analyze:
+            Mining operation data to analyze:
             {json.dumps(form_data, indent=2)}
             
-            Now, provide ONLY the JSON object as your response.
+            Response (JSON only, no markdown, no explanation):
             """
 
             api_payload = {
               "model": "local-model",
               "messages": [
-                {"role": "system", "content": "You are a helpful assistant that only responds with valid JSON objects."},
+                {"role": "system", "content": "You are an environmental analyst AI that responds ONLY with valid JSON objects. Never include markdown code blocks, explanations, or any text outside the JSON object."},
                 {"role": "user", "content": prompt_text}
               ],
-              "temperature": 0.7,
+              "temperature": 0.3
             }
 
             response = requests.post(AI_MODEL_URL, json=api_payload)
 
             if response.status_code == 200:
                 api_result = response.json()
-                result_content_str = api_result['choices'][0]['message']['content']
+                result_content_str = api_result['choices'][0]['message']['content'].strip()
                 logging.info(f"AI Model Raw Response: {result_content_str}")
 
                 try:
+                    # Try to extract JSON from the response
                     json_start = result_content_str.find('{')
                     json_end = result_content_str.rfind('}') + 1
-                    if json_start != -1 and json_end != -1:
+                    
+                    if json_start != -1 and json_end > json_start:
                         clean_json_str = result_content_str[json_start:json_end]
                         result_data = json.loads(clean_json_str)
-                        return render_template('index.html', result_data=result_data)
+                        
+                        # Validate that the JSON has the expected structure
+                        if not isinstance(result_data, dict):
+                            raise ValueError("Response is not a JSON object")
+                        if 'overall_risk_score' not in result_data:
+                            raise ValueError("Missing 'overall_risk_score' field")
+                        if 'summary' not in result_data:
+                            raise ValueError("Missing 'summary' field")
+                        if 'risks' not in result_data:
+                            raise ValueError("Missing 'risks' field")
+                        
+                        logging.info(f"Successfully parsed AI response with risk score: {result_data.get('overall_risk_score')}")
+                        return render_template('index.html', result_data=result_data, form_data=form_data)
                     else:
                         raise ValueError("No valid JSON object found in the AI response.")
+                        
                 except (json.JSONDecodeError, ValueError) as e:
                     logging.error(f"Failed to parse AI response as JSON: {e}")
-                    return render_template('index.html', result_raw=result_content_str)
+                    logging.error(f"Problematic content: {result_content_str}")
+                    return render_template('index.html', 
+                                         error=f"The AI returned an invalid response. Please try again. Error: {str(e)}",
+                                         result_raw=result_content_str)
             else:
                 error_message = f"AI Model Error: Status Code {response.status_code}, Message: {response.text}"
                 logging.error(error_message)
