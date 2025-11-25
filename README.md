@@ -1,2 +1,304 @@
-# daryn
-EcoImpact AI: Predicting environmental consequences of mineral resource development using artificial intelligence.
+# 🌍 EcoImpact AI | ЭкоВлияние ИИ
+
+*Predicting environmental consequences of mineral resource development using artificial intelligence*  
+*Прогнозирование экологических последствий разработки минеральных ресурсов с использованием искусственного интеллекта*
+
+![Project Logo](static/logo.png)
+
+---
+
+## 🇺🇸 English Version
+
+### 📖 About the Project
+
+**EcoImpact AI** is an innovative web application developed by 9th-grade high school students for a project competition. Our tool uses artificial intelligence to assess the environmental impact of mining operations and mineral resource development projects.
+
+The application analyzes various factors such as:
+- 💧 **Water contamination risks**
+- 🌬️ **Air quality degradation**
+- 🌱 **Land and biodiversity impact**
+
+Our AI model provides comprehensive risk scores and detailed reports to help environmental engineers and decision-makers make informed choices about mining projects.
+
+### 🎯 Project Goals
+
+- Create an accessible tool for environmental impact assessment
+- Demonstrate the power of AI in environmental protection
+- Provide educational value about sustainable mining practices
+- Show how technology can support environmental conservation
+
+### ✨ Key Features
+
+- 🤖 **AI-Powered Analysis**: Advanced machine learning for environmental risk assessment
+- 📊 **Risk Scoring System**: Numerical scores from 0-10 for different environmental factors
+- 📄 **PDF Report Generation**: Professional reports ready for stakeholders
+- 🌐 **User-Friendly Interface**: Simple web interface accessible to everyone
+- 📈 **Real-Time Processing**: Instant analysis and results
+- 🔍 **Detailed Breakdowns**: Category-specific environmental impact analysis
+
+### 🛠️ Technology Stack
+
+| Component | Technology | Purpose |
+|-----------|------------|---------|
+| **Backend** | Python Flask | Web application framework |
+| **AI Model** | LM Studio (Local) | Environmental analysis AI |
+| **Frontend** | HTML/CSS/JavaScript | User interface |
+| **PDF Generation** | WeasyPrint | Report creation |
+| **Logging** | Python logging | Application monitoring |
+
+### 📊 Architecture Diagram
+
+```mermaid
+graph TB
+    A[User Input] --> B[Flask Web App]
+    B --> C[Data Processing]
+    C --> D[AI Model (LM Studio)]
+    D --> E[Risk Analysis]
+    E --> F[JSON Response]
+    F --> G[Web Display]
+    F --> H[PDF Report]
+    
+    subgraph "AI Analysis"
+    D --> I[Water Risk]
+    D --> J[Air Quality]
+    D --> K[Biodiversity]
+    end
+```
+
+### 🚀 Quick Start
+
+1. **Clone the Repository**
+   ```bash
+   git clone <repository-url>
+   cd EcoImpact-AI
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   pip install flask requests weasyprint
+   ```
+
+3. **Setup LM Studio**
+   - Download and install [LM Studio](https://lmstudio.ai/)
+   - Load an AI model suitable for text analysis
+   - Start the local server on `http://127.0.0.1:1234`
+   - Follow our detailed [LM Studio Setup Guide](LM_STUDIO_SETUP_GUIDE.md)
+
+4. **Run the Application**
+   ```bash
+   python app.py
+   ```
+
+5. **Access the Web Interface**
+   - Open your browser and go to `http://127.0.0.1:5000`
+   - Fill in the mining project details
+   - Get instant AI-powered environmental impact assessment!
+
+### 📈 Usage Examples
+
+#### Input Parameters
+- **Project Location**: GPS coordinates or region name
+- **Mining Type**: Surface mining, underground, etc.
+- **Resource Type**: Coal, metals, minerals
+- **Project Scale**: Small, medium, large operations
+- **Environmental Sensitivity**: Nearby water sources, protected areas
+
+#### Sample Output
+```json
+{
+  "overall_risk_score": 6.8,
+  "summary": "The proposed mining operation presents moderate to high environmental risks...",
+  "risks": [
+    {
+      "category": "Water Contamination",
+      "score": 7.2,
+      "details": "High risk due to proximity to groundwater sources..."
+    }
+  ]
+}
+```
+
+### 📸 Suggested Photos and Illustrations
+
+**For documentation and presentation:**
+
+1. **Screenshots needed:**
+   - Main web interface with form fields
+   - Results page showing risk scores and analysis
+   - PDF report example
+   - AI model configuration in LM Studio
+
+2. **Diagrams to create:**
+   - System architecture flowchart
+   - Environmental impact assessment process
+   - Risk scoring methodology visualization
+   - Data flow between components
+
+3. **Additional visual elements:**
+   - Before/after environmental impact comparisons
+   - Charts showing different risk levels
+   - Mining operation types illustrated
+   - Environmental protection infographics
+
+### 🏆 Educational Value
+
+This project demonstrates:
+- **STEM Integration**: Combining computer science, environmental science, and mathematics
+- **Real-World Problem Solving**: Addressing actual environmental challenges
+- **AI Applications**: Practical use of machine learning in environmental protection
+- **Web Development Skills**: Full-stack development experience
+- **Data Analysis**: Working with complex environmental datasets
+
+### 🌟 Future Enhancements
+
+- 🗺️ **Interactive Maps**: Visualize mining locations and environmental risks
+- 📱 **Mobile App**: Extend access to field researchers
+- 🌍 **Multi-language Support**: Expand to more languages
+- 📊 **Advanced Analytics**: Historical trend analysis
+- 🤝 **API Integration**: Connect with external environmental databases
+
+### 👥 Team
+
+Developed with ❤️ by 9th-grade students participating in a project competition.
+
+### 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🇷🇺 Русская версия
+
+### 📖 О проекте
+
+**ЭкоВлияние ИИ** — это инновационное веб-приложение, разработанное учениками 9 класса для конкурса проектов. Наш инструмент использует искусственный интеллект для оценки воздействия горнодобывающих операций и проектов разработки минеральных ресурсов на окружающую среду.
+
+Приложение анализирует различные факторы, такие как:
+- 💧 **Риски загрязнения воды**
+- 🌬️ **Ухудшение качества воздуха**
+- 🌱 **Воздействие на землю и биоразнообразие**
+
+Наша модель ИИ предоставляет комплексные оценки рисков и подробные отчёты, помогая инженерам-экологам и лицам, принимающим решения, делать осознанный выбор в отношении горнодобывающих проектов.
+
+### 🎯 Цели проекта
+
+- Создать доступный инструмент для оценки воздействия на окружающую среду
+- Продемонстрировать возможности ИИ в области защиты окружающей среды
+- Обеспечить образовательную ценность в области устойчивых методов добычи
+- Показать, как технологии могут поддержать сохранение окружающей среды
+
+### ✨ Ключевые возможности
+
+- 🤖 **Анализ на основе ИИ**: Продвинутое машинное обучение для оценки экологических рисков
+- 📊 **Система оценки рисков**: Численные оценки от 0 до 10 для различных экологических факторов
+- 📄 **Генерация PDF-отчётов**: Профессиональные отчёты для заинтересованных сторон
+- 🌐 **Удобный интерфейс**: Простой веб-интерфейс, доступный каждому
+- 📈 **Обработка в реальном времени**: Мгновенный анализ и результаты
+- 🔍 **Подробные разбивки**: Анализ воздействия на окружающую среду по категориям
+
+### 🛠️ Технологический стек
+
+| Компонент | Технология | Назначение |
+|-----------|------------|------------|
+| **Бэкенд** | Python Flask | Фреймворк веб-приложения |
+| **Модель ИИ** | LM Studio (Локально) | ИИ для экологического анализа |
+| **Фронтенд** | HTML/CSS/JavaScript | Пользовательский интерфейс |
+| **Генерация PDF** | WeasyPrint | Создание отчётов |
+| **Логирование** | Python logging | Мониторинг приложения |
+
+### 🚀 Быстрый старт
+
+1. **Клонирование репозитория**
+   ```bash
+   git clone <repository-url>
+   cd EcoImpact-AI
+   ```
+
+2. **Установка зависимостей**
+   ```bash
+   pip install flask requests weasyprint
+   ```
+
+3. **Настройка LM Studio**
+   - Скачайте и установите [LM Studio](https://lmstudio.ai/)
+   - Загрузите модель ИИ, подходящую для анализа текста
+   - Запустите локальный сервер на `http://127.0.0.1:1234`
+   - Следуйте нашему подробному [Руководству по настройке LM Studio](LM_STUDIO_SETUP_GUIDE.md)
+
+4. **Запуск приложения**
+   ```bash
+   python app.py
+   ```
+
+5. **Доступ к веб-интерфейсу**
+   - Откройте браузер и перейдите на `http://127.0.0.1:5000`
+   - Заполните детали горнодобывающего проекта
+   - Получите мгновенную оценку воздействия на окружающую среду на основе ИИ!
+
+### 📊 Примеры использования
+
+#### Входные параметры
+- **Местоположение проекта**: GPS-координаты или название региона
+- **Тип добычи**: Открытая разработка, подземная добыча и др.
+- **Тип ресурса**: Уголь, металлы, минералы
+- **Масштаб проекта**: Малые, средние, крупные операции
+- **Экологическая чувствительность**: Близлежащие водные источники, охраняемые территории
+
+### 🏆 Образовательная ценность
+
+Этот проект демонстрирует:
+- **Интеграцию STEM**: Сочетание информатики, экологии и математики
+- **Решение реальных проблем**: Обращение к актуальным экологическим вызовам
+- **Применение ИИ**: Практическое использование машинного обучения в защите окружающей среды
+- **Навыки веб-разработки**: Опыт полноценной разработки
+- **Анализ данных**: Работа со сложными экологическими наборами данных
+
+### 🌟 Будущие улучшения
+
+- 🗺️ **Интерактивные карты**: Визуализация местоположений добычи и экологических рисков
+- 📱 **Мобильное приложение**: Расширение доступа для полевых исследователей
+- 🌍 **Многоязычная поддержка**: Расширение на большее количество языков
+- 📊 **Продвинутая аналитика**: Анализ исторических тенденций
+- 🤝 **Интеграция API**: Подключение к внешним экологическим базам данных
+
+### 👥 Команда
+
+Разработано с ❤️ учениками 9 класса, участвующими в конкурсе проектов.
+
+### 📄 Лицензия
+
+Этот проект лицензирован под лицензией MIT — см. файл [LICENSE](LICENSE) для подробностей.
+
+---
+
+## 📊 Project Statistics | Статистика проекта
+
+| Metric | Value |
+|--------|-------|
+| Lines of Code | ~1000+ |
+| Languages | Python, HTML, CSS, JavaScript |
+| Dependencies | Flask, WeasyPrint, Requests |
+| Development Time | Academic semester |
+| Target Audience | Environmental engineers, students, researchers |
+
+---
+
+## 🤝 Contributing | Участие в разработке
+
+We welcome contributions from the community! Please see our contribution guidelines for more information.
+
+Мы приветствуем участие сообщества в разработке! Пожалуйста, ознакомьтесь с нашими рекомендациями для участников.
+
+---
+
+## 📞 Contact | Контакты
+
+For questions about this project, please contact the development team.
+
+По вопросам об этом проекте обращайтесь к команде разработчиков.
+
+---
+
+*This project was created as part of a high school STEM education initiative to promote environmental awareness through technology.*
+
+*Этот проект был создан в рамках инициативы STEM-образования в средней школе для повышения экологической осведомлённости через технологии.*
