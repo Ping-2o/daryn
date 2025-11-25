@@ -5,6 +5,35 @@
 
 ![Project Logo](static/logo.png)
 
+## 🌐 Language Navigation | Навигация по языкам
+
+| Language | Section |
+|----------|---------|
+| 🇺🇸 **English** | [Click here to jump to English version](#-english-version) |
+| 🇷🇺 **Русский** | [Нажмите здесь для перехода к русской версии](#-русская-версия) |
+
+---
+
+## 📑 Table of Contents | Содержание
+
+### 🇺🇸 English Sections:
+- [📖 About the Project](#-about-the-project)
+- [🎯 Project Goals](#-project-goals)
+- [✨ Key Features](#-key-features)
+- [🛠️ Technology Stack](#️-technology-stack)
+- [📊 System Architecture](#-system-architecture)
+- [🚀 Quick Start](#-quick-start)
+- [📈 Usage Examples](#-usage-examples)
+- [🏆 Educational Value](#-educational-value)
+
+### 🇷🇺 Русские разделы:
+- [📖 О проекте](#-о-проекте)
+- [🎯 Цели проекта](#-цели-проекта)
+- [✨ Ключевые возможности](#-ключевые-возможности)
+- [🛠️ Технологический стек](#️-технологический-стек-1)
+- [🚀 Быстрый старт](#-быстрый-старт)
+- [🏆 Образовательная ценность](#-образовательная-ценность)
+
 ---
 
 ## 🇺🇸 English Version
@@ -217,22 +246,48 @@ xychart-beta
 ```mermaid
 gantt
     title AI Analysis Process Timeline
-    dateFormat X
-    axisFormat %s
+    dateFormat YYYY-MM-DD
+    axisFormat %H:%M:%S
     
     section Data Input
-        Form Validation    :0, 2s
-        Data Preprocessing :2s, 3s
+        Form Validation    :milestone, m1, 2024-01-01, 0d
+        Data Preprocessing :active, task1, after m1, 1d
     
-    section AI Analysis
-        Model Loading      :3s, 5s
-        Risk Calculation   :5s, 12s
-        Result Generation  :12s, 15s
+    section AI Analysis  
+        Model Loading      :task2, after task1, 2d
+        Risk Calculation   :crit, task3, after task2, 7d
+        Result Generation  :task4, after task3, 3d
     
     section Output
-        JSON Response      :15s, 16s
-        PDF Generation     :16s, 20s
-        Display Results    :20s, 22s
+        JSON Response      :milestone, m2, after task4, 0d
+        PDF Generation     :task5, after m2, 4d
+        Display Results    :task6, after task5, 2d
+```
+
+#### Processing Speed Breakdown
+```mermaid
+pie title "AI Processing Time Distribution (Total: ~22 seconds)"
+    "Model Loading" : 23
+    "Risk Calculation" : 32
+    "Data Processing" : 18
+    "Result Generation" : 14
+    "PDF Creation" : 13
+```
+
+#### System Response Flow
+```mermaid
+flowchart LR
+    A[⏱️ 0s<br/>User Submit] --> B[⏱️ 2s<br/>Data Validated]
+    B --> C[⏱️ 5s<br/>Model Ready]
+    C --> D[⏱️ 12s<br/>AI Analysis]
+    D --> E[⏱️ 15s<br/>Results Ready]
+    E --> F[⏱️ 20s<br/>PDF Generated]
+    F --> G[⏱️ 22s<br/>Complete]
+    
+    style A fill:#ffcdd2
+    style C fill:#fff3e0
+    style D fill:#e8f5e8
+    style G fill:#e1f5fe
 ```
 
 ### 📈 Usage Examples
