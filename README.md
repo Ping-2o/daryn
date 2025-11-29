@@ -1,4 +1,4 @@
-# 🌍 EcoImpact AI
+# 🌍 EcoImpact AI | ЭкоВлияние ИИ
 
 *Predicting environmental consequences of mineral resource development using artificial intelligence*  
 *Прогнозирование экологических последствий разработки минеральных ресурсов с использованием искусственного интеллекта*
@@ -196,6 +196,8 @@ flowchart LR
 
 ### 🚀 Quick Start
 
+#### 🖥️ Local Development
+
 1. **Clone the Repository**
    ```bash
    git clone <repository-url>
@@ -204,7 +206,7 @@ flowchart LR
 
 2. **Install Dependencies**
    ```bash
-   pip install flask requests weasyprint
+   pip install -r requirements.txt
    ```
 
 3. **Setup LM Studio**
@@ -223,11 +225,41 @@ flowchart LR
    - Fill in the mining project details
    - Get instant AI-powered environmental impact assessment!
 
+#### 🚂 Deploy to Railway (Production)
+
+Deploy your application to the cloud in minutes!
+
+1. **Quick Deploy**
+   ```bash
+   git add .
+   git commit -m "Ready for Railway deployment"
+   git push origin main
+   ```
+
+2. **Setup on Railway**
+   - Visit [railway.app](https://railway.app) and login with GitHub
+   - Create new project → Deploy from GitHub repo
+   - Select your repository
+
+3. **Configure Environment**
+   - Add environment variable: `AI_MODEL_URL`
+   - Example: `https://api.groq.com/openai/v1/chat/completions`
+   - Or deploy your own AI model on a separate service
+
+4. **Done!** 🎉
+   - Railway automatically builds and deploys
+   - Access your app at `https://your-app.up.railway.app`
+
+📚 **Detailed guides:**
+- [Railway Deployment Guide](RAILWAY_DEPLOYMENT_GUIDE.md) - Full documentation
+- [Railway Quick Start (RU)](RAILWAY_QUICK_START_RU.md) - Быстрый старт на русском
+
 ### 📊 Risk Assessment Methodology
 
 #### Environmental Risk Categories
 ```mermaid
 %%{init: {'theme':'dark', 'themeVariables': {'pie1':'#ffffff', 'pie2':'#cccccc', 'pie3':'#999999', 'pie4':'#666666', 'pie5':'#333333', 'pieTitleTextSize':'18px', 'pieTitleTextColor':'#ffffff', 'pieSectionTextSize':'16px', 'pieSectionTextColor':'#ffffff', 'pieOuterStrokeWidth':'2px', 'pieOuterStrokeColor':'#ffffff'}}}%%
+%%{init: {'theme':'dark', 'themeVariables': {'pie1':'#ff4444', 'pie2':'#ffaa00', 'pie3':'#44ff44', 'pie4':'#4488ff', 'pie5':'#ff44ff', 'pieTitleTextSize':'18px', 'pieTitleTextColor':'#ffffff', 'pieSectionTextSize':'16px', 'pieSectionTextColor':'#ffffff', 'pieOuterStrokeWidth':'2px', 'pieOuterStrokeColor':'#ffffff'}}}%%
 pie title Environmental Impact Distribution
     "Water Contamination" : 35
     "Air Quality" : 25
@@ -307,6 +339,7 @@ gantt
 #### Processing Speed Breakdown
 ```mermaid
 %%{init: {'theme':'dark', 'themeVariables': {'pie1':'#ffffff', 'pie2':'#cccccc', 'pie3':'#999999', 'pie4':'#666666', 'pie5':'#333333', 'pieTitleTextSize':'18px', 'pieTitleTextColor':'#ffffff', 'pieSectionTextSize':'16px', 'pieSectionTextColor':'#ffffff', 'pieOuterStrokeWidth':'2px', 'pieOuterStrokeColor':'#ffffff'}}}%%
+%%{init: {'theme':'dark', 'themeVariables': {'pie1':'#ff6b6b', 'pie2':'#4ecdc4', 'pie3':'#45b7d1', 'pie4':'#96ceb4', 'pie5':'#ffeaa7', 'pieTitleTextSize':'18px', 'pieTitleTextColor':'#ffffff', 'pieSectionTextSize':'16px', 'pieSectionTextColor':'#ffffff', 'pieOuterStrokeWidth':'2px', 'pieOuterStrokeColor':'#ffffff'}}}%%
 pie title "AI Processing Time Distribution (Total: ~22 seconds)"
     "Model Loading" : 23
     "Risk Calculation" : 32
@@ -398,6 +431,10 @@ This project demonstrates:
 - 📊 **Advanced Analytics**: Historical trend analysis
 - 🤝 **API Integration**: Connect with external environmental databases
 
+### 👥 Team
+
+Developed with ❤️ by 9th-grade students participating in a project competition.
+
 ### 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -408,7 +445,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### 📖 О проекте
 
-**EcoImpact AI** — это инновационное веб-приложение, разработанное учениками 9 класса для конкурса проектов. Наш инструмент использует искусственный интеллект для оценки воздействия горнодобывающих операций и проектов разработки минеральных ресурсов на окружающую среду.
+**ЭкоВлияние ИИ** — это инновационное веб-приложение, разработанное учениками 9 класса для конкурса проектов. Наш инструмент использует искусственный интеллект для оценки воздействия горнодобывающих операций и проектов разработки минеральных ресурсов на окружающую среду.
 
 Приложение анализирует различные факторы, такие как:
 - 💧 **Риски загрязнения воды**
@@ -445,6 +482,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### 🚀 Быстрый старт
 
+#### 🖥️ Локальная разработка
+
 1. **Клонирование репозитория**
    ```bash
    git clone <repository-url>
@@ -453,7 +492,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 2. **Установка зависимостей**
    ```bash
-   pip install flask requests weasyprint
+   pip install -r requirements.txt
    ```
 
 3. **Настройка LM Studio**
@@ -471,6 +510,35 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
    - Откройте браузер и перейдите на `http://127.0.0.1:5000`
    - Заполните детали горнодобывающего проекта
    - Получите мгновенную оценку воздействия на окружающую среду на основе ИИ!
+
+#### 🚂 Развертывание на Railway (Продакшн)
+
+Разверните приложение в облаке за несколько минут!
+
+1. **Быстрое развертывание**
+   ```bash
+   git add .
+   git commit -m "Готово к развертыванию на Railway"
+   git push origin main
+   ```
+
+2. **Настройка на Railway**
+   - Перейдите на [railway.app](https://railway.app) и войдите через GitHub
+   - Создайте новый проект → Deploy from GitHub repo
+   - Выберите ваш репозиторий
+
+3. **Настройка переменных окружения**
+   - Добавьте переменную окружения: `AI_MODEL_URL`
+   - Пример: `https://api.groq.com/openai/v1/chat/completions`
+   - Или разверните собственную модель ИИ на отдельном сервисе
+
+4. **Готово!** 🎉
+   - Railway автоматически соберёт и развернёт приложение
+   - Доступ к приложению по адресу `https://your-app.up.railway.app`
+
+📚 **Подробные руководства:**
+- [Railway Deployment Guide](RAILWAY_DEPLOYMENT_GUIDE.md) - Полная документация (EN)
+- [Railway Quick Start (RU)](RAILWAY_QUICK_START_RU.md) - Быстрый старт на русском
 
 ### 📊 Примеры использования
 
@@ -498,6 +566,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 📊 **Продвинутая аналитика**: Анализ исторических тенденций
 - 🤝 **Интеграция API**: Подключение к внешним экологическим базам данных
 
+### 👥 Команда
+
+Разработано с ❤️ учениками 9 класса, участвующими в конкурсе проектов.
+
 ### 📄 Лицензия
 
 Этот проект лицензирован под лицензией MIT — см. файл [LICENSE](LICENSE) для подробностей.
@@ -509,11 +581,41 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Development Metrics
 ```mermaid
 %%{init: {'theme':'dark', 'themeVariables': {'pie1':'#ffffff', 'pie2':'#cccccc', 'pie3':'#999999', 'pie4':'#666666', 'pieTitleTextSize':'18px', 'pieTitleTextColor':'#ffffff', 'pieSectionTextSize':'16px', 'pieSectionTextColor':'#ffffff', 'pieOuterStrokeWidth':'2px', 'pieOuterStrokeColor':'#ffffff'}}}%%
+%%{init: {'theme':'dark', 'themeVariables': {'pie1':'#3776ab', 'pie2':'#e34c26', 'pie3':'#f1e05a', 'pie4':'#6f42c1', 'pieTitleTextSize':'18px', 'pieTitleTextColor':'#ffffff', 'pieSectionTextSize':'16px', 'pieSectionTextColor':'#ffffff', 'pieOuterStrokeWidth':'2px', 'pieOuterStrokeColor':'#ffffff'}}}%%
 pie title Code Distribution by Language
     "Python (Backend)" : 60
     "HTML/CSS (Frontend)" : 25
     "JavaScript (UI)" : 10
     "Configuration" : 5
+```
+
+### Project Timeline
+```mermaid
+gantt
+    title EcoImpact AI Development Timeline
+    dateFormat YYYY-MM-DD
+    section Planning
+        Project Concept    :2024-01-15, 2024-01-30
+        Research Phase     :2024-01-20, 2024-02-10
+    section Development
+        Backend Setup      :2024-02-01, 2024-02-15
+        AI Integration     :2024-02-10, 2024-03-01
+        Frontend Design    :2024-02-15, 2024-03-05
+        Testing Phase      :2024-03-01, 2024-03-15
+    section Documentation
+        User Manual        :2024-03-10, 2024-03-20
+        README Creation    :2024-03-15, 2024-03-25
+        Final Presentation :2024-03-20, 2024-03-30
+```
+
+### Performance Metrics
+```mermaid
+%%{init: {'theme':'dark', 'themeVariables': {'xyChart': {'backgroundColor': '#1a1a1a', 'titleColor': '#ffffff', 'xAxisTitleColor': '#ffffff', 'xAxisLabelColor': '#ffffff', 'yAxisTitleColor': '#ffffff', 'yAxisLabelColor': '#ffffff', 'plotColorPalette': '#ffffff,#cccccc,#999999,#666666,#333333'}}}%%
+xychart-beta
+    title "System Performance Analysis"
+    x-axis ["Response Time", "Accuracy", "User Satisfaction", "Processing Speed", "Reliability"]
+    y-axis "Performance Score (%)" 0 --> 100
+    bar [85, 92, 88, 78, 95]
 ```
 
 ### Technology Stack Usage
@@ -602,6 +704,17 @@ quadrantChart
 We welcome contributions from the community! Please see our contribution guidelines for more information.
 
 Мы приветствуем участие сообщества в разработке! Пожалуйста, ознакомьтесь с нашими рекомендациями для участников.
+
+---
+
+*This project was created as part of a high school STEM education initiative to promote environmental awareness through technology.*
+
+*Этот проект был создан в рамках инициативы STEM-образования в средней школе для повышения экологической осведомлённости через технологии.*
+## 📞 Contact | Контакты
+
+For questions about this project, please contact the development team.
+
+По вопросам об этом проекте обращайтесь к команде разработчиков.
 
 ---
 

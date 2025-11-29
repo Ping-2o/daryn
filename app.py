@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, Response
 import requests
 import json
 import logging
-import datetime  # <-- ADD THIS LINE
+import datetime
+import os
 from weasyprint import HTML
 
 # --- 1. CORE FLASK SETUP ---
@@ -16,8 +17,10 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 
-# The local URL where your AI model is being served
-AI_MODEL_URL = "http://127.0.0.1:1234/v1/chat/completions"
+# The URL where your AI model is being served
+# For local development: http://127.0.0.1:1234/v1/chat/completions
+# For production: set AI_MODEL_URL environment variable
+AI_MODEL_URL = os.environ.get("AI_MODEL_URL", "http://127.0.0.1:1234/v1/chat/completions")
 
 
 # --- 2. MAIN APPLICATION ROUTE ---
@@ -150,9 +153,14 @@ def show_logs():
 
 # --- 5. RUN THE APPLICATION ---
 if __name__ == '__main__':
-    host = '127.0.0.1'
-    port = 5000
+    # Get host and port from environment variables (for Railway/Heroku)
+    # or use defaults for local development
+    host = os.environ.get('HOST', '0.0.0.0')
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV', 'development') == 'development'
+    
     print("===================================================")
     print(f"Flask server running at: http://{host}:{port}/")
+    print(f"AI Model URL: {AI_MODEL_URL}")
     print("===================================================")
-    app.run(host=host, port=port, debug=True)
+    app.run(host=host, port=port, debug=debug)
