@@ -3,7 +3,9 @@
 *Predicting environmental consequences of mineral resource development using artificial intelligence*  
 *Прогнозирование экологических последствий разработки минеральных ресурсов с использованием искусственного интеллекта*
 
-![Project Logo](static/logo.png)
+<div align="center">
+  <img src="static/logo.png" width="350" alt="EcoImpact AI Logo">
+</div>
 
 ## 🌐 Language Navigation | Навигация по языкам
 
