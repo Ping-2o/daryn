@@ -211,7 +211,7 @@ flowchart LR
 
 3. **Setup LM Studio**
    - Download and install [LM Studio](https://lmstudio.ai/)
-   - Load an AI model suitable for text analysis (recommended: Llama 2 7B or similar)
+   - Load an AI model suitable for text analysis (recommended: Granite 4.0 H Tiny or similar)
    - Start the local server on `http://127.0.0.1:1234` (use the "Local Server" tab in LM Studio)
    - Ensure the server is running before starting the Flask application
 
@@ -460,7 +460,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 3. **Настройка LM Studio**
    - Скачайте и установите [LM Studio](https://lmstudio.ai/)
-   - Загрузите модель ИИ, подходящую для анализа текста (рекомендуется: Llama 2 7B или аналог)
+   - Загрузите модель ИИ, подходящую для анализа текста (рекомендуется:  Granite 4.0 H Tiny или аналог)
    - Запустите локальный сервер на `http://127.0.0.1:1234` (используйте вкладку "Local Server" в LM Studio)
    - Убедитесь, что сервер запущен перед запуском Flask-приложения
 
