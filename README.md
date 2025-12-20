@@ -32,7 +32,7 @@
 - [📖 О проекте](#-о-проекте)
 - [🎯 Цели проекта](#-цели-проекта)
 - [✨ Ключевые возможности](#-ключевые-возможности)
-- [🛠️ Технологический стек](#️-технологический-стек-1)
+- [🛠️ Технологический стек](#️-технологический-стек)
 - [🚀 Быстрый старт](#-быстрый-старт)
 - [🏆 Образовательная ценность](#-образовательная-ценность)
 
@@ -200,8 +200,8 @@ flowchart LR
 
 1. **Clone the Repository**
    ```bash
-   git clone <repository-url>
-   cd EcoImpact-AI
+   git clone https://github.com/yourusername/ecoimpact-ai.git
+   cd ecoimpact-ai
    ```
 
 2. **Install Dependencies**
@@ -211,9 +211,9 @@ flowchart LR
 
 3. **Setup LM Studio**
    - Download and install [LM Studio](https://lmstudio.ai/)
-   - Load an AI model suitable for text analysis
-   - Start the local server on `http://127.0.0.1:1234`
-   - Follow our detailed [LM Studio Setup Guide](LM_STUDIO_SETUP_GUIDE.md)
+   - Load an AI model suitable for text analysis (recommended: Llama 2 7B or similar)
+   - Start the local server on `http://127.0.0.1:1234` (use the "Local Server" tab in LM Studio)
+   - Ensure the server is running before starting the Flask application
 
 4. **Run the Application**
    ```bash
@@ -449,8 +449,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 1. **Клонирование репозитория**
    ```bash
-   git clone <repository-url>
-   cd EcoImpact-AI
+   git clone https://github.com/yourusername/ecoimpact-ai.git
+   cd ecoimpact-ai
    ```
 
 2. **Установка зависимостей**
@@ -460,9 +460,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 3. **Настройка LM Studio**
    - Скачайте и установите [LM Studio](https://lmstudio.ai/)
-   - Загрузите модель ИИ, подходящую для анализа текста
-   - Запустите локальный сервер на `http://127.0.0.1:1234`
-   - Следуйте нашему подробному [Руководству по настройке LM Studio](LM_STUDIO_SETUP_GUIDE.md)
+   - Загрузите модель ИИ, подходящую для анализа текста (рекомендуется: Llama 2 7B или аналог)
+   - Запустите локальный сервер на `http://127.0.0.1:1234` (используйте вкладку "Local Server" в LM Studio)
+   - Убедитесь, что сервер запущен перед запуском Flask-приложения
 
 4. **Запуск приложения**
    ```bash
@@ -601,9 +601,41 @@ quadrantChart
 
 ## 🤝 Contributing | Участие в разработке
 
-We welcome contributions from the community! Please see our contribution guidelines for more information.
+We welcome contributions from the community! Here's how you can help:
 
-Мы приветствуем участие сообщества в разработке! Пожалуйста, ознакомьтесь с нашими рекомендациями для участников.
+**How to Contribute:**
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
+
+**Contribution Areas:**
+- 🐛 Bug fixes and issue resolution
+- ✨ New features and enhancements
+- 📝 Documentation improvements
+- 🌍 Translations and localization
+- 🧪 Test coverage expansion
+- 💡 Suggestions and ideas
+
+---
+
+Мы приветствуем участие сообщества в разработке! Вот как вы можете помочь:
+
+**Как внести свой вклад:**
+1. **Сделайте форк** репозитория
+2. **Создайте** ветку для новой функции (`git checkout -b feature/AmazingFeature`)
+3. **Зафиксируйте** изменения (`git commit -m 'Add some AmazingFeature'`)
+4. **Отправьте** в ветку (`git push origin feature/AmazingFeature`)
+5. **Откройте** Pull Request
+
+**Области участия:**
+- 🐛 Исправление ошибок и решение проблем
+- ✨ Новые функции и улучшения
+- 📝 Улучшение документации
+- 🌍 Переводы и локализация
+- 🧪 Расширение тестового покрытия
+- 💡 Предложения и идеи
 
 ---
 
