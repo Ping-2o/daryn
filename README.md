@@ -206,7 +206,7 @@ flowchart LR
 
 2. **Install Dependencies**
    ```bash
-   pip install flask requests weasyprint
+   pip3 install -r requirements.txt
    ```
 
 3. **Setup LM Studio**
@@ -455,7 +455,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 2. **Установка зависимостей**
    ```bash
-   pip install flask requests weasyprint
+   pip3 install -r requirements.txt
    ```
 
 3. **Настройка LM Studio**
