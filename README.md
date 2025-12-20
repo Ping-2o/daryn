@@ -200,8 +200,8 @@ flowchart LR
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/ecoimpact-ai.git
-   cd ecoimpact-ai
+   git clone https://github.com/Ping-2o/daryn EcoImpactAI
+   cd EcoImpactAI
    ```
 
 2. **Install Dependencies**
@@ -449,8 +449,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 1. **Клонирование репозитория**
    ```bash
-   git clone https://github.com/yourusername/ecoimpact-ai.git
-   cd ecoimpact-ai
+   git clone https://github.com/Ping-2o/daryn EcoImpactAI
+   cd EcoImpactAI
    ```
 
 2. **Установка зависимостей**
