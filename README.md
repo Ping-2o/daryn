@@ -229,13 +229,29 @@ flowchart LR
 
 #### Environmental Risk Categories
 ```mermaid
-%%{init: {'theme':'dark', 'themeVariables': {'pie1':'#ffffff', 'pie2':'#cccccc', 'pie3':'#999999', 'pie4':'#666666', 'pie5':'#333333', 'pieTitleTextSize':'18px', 'pieTitleTextColor':'#ffffff', 'pieSectionTextSize':'16px', 'pieSectionTextColor':'#ffffff', 'pieOuterStrokeWidth':'2px', 'pieOuterStrokeColor':'#ffffff'}}}%%
+%%{init: {
+  'theme':'dark', 
+  'themeVariables': {
+    'pie1':'#0077be', 
+    'pie2':'#87CEEB', 
+    'pie3':'#228B22', 
+    'pie4':'#8B4513', 
+    'pie5':'#808080',
+    'pieTitleTextSize':'18px', 
+    'pieTitleTextColor':'#ffffff', 
+    'pieSectionTextSize':'16px', 
+    'pieSectionTextColor':'#ffffff', 
+    'pieOuterStrokeWidth':'2px', 
+    'pieOuterStrokeColor':'#ffffff'
+  }
+}}%%
 pie title Environmental Impact Distribution
     "Water Contamination" : 35
     "Air Quality" : 25
     "Biodiversity Loss" : 20
     "Soil Degradation" : 15
     "Noise Pollution" : 5
+
 ```
 
 #### Risk Scoring System
@@ -308,7 +324,22 @@ gantt
 
 #### Processing Speed Breakdown
 ```mermaid
-%%{init: {'theme':'dark', 'themeVariables': {'pie1':'#ffffff', 'pie2':'#cccccc', 'pie3':'#999999', 'pie4':'#666666', 'pie5':'#333333', 'pieTitleTextSize':'18px', 'pieTitleTextColor':'#ffffff', 'pieSectionTextSize':'16px', 'pieSectionTextColor':'#ffffff', 'pieOuterStrokeWidth':'2px', 'pieOuterStrokeColor':'#ffffff'}}}%%
+%%{init: {
+  'theme':'dark', 
+  'themeVariables': {
+    'pie1':'#3498db', 
+    'pie2':'#e74c3c', 
+    'pie3':'#f1c40f', 
+    'pie4':'#2ecc71', 
+    'pie5':'#9b59b6',
+    'pieTitleTextSize':'18px', 
+    'pieTitleTextColor':'#ffffff', 
+    'pieSectionTextSize':'16px', 
+    'pieSectionTextColor':'#ffffff', 
+    'pieOuterStrokeWidth':'2px', 
+    'pieOuterStrokeColor':'#ffffff'
+  }
+}}%%
 pie title "AI Processing Time Distribution (Total: ~14 seconds)"
     "Model Loading" : 23
     "Risk Calculation" : 32
