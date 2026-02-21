@@ -309,7 +309,7 @@ gantt
 #### Processing Speed Breakdown
 ```mermaid
 %%{init: {'theme':'dark', 'themeVariables': {'pie1':'#ffffff', 'pie2':'#cccccc', 'pie3':'#999999', 'pie4':'#666666', 'pie5':'#333333', 'pieTitleTextSize':'18px', 'pieTitleTextColor':'#ffffff', 'pieSectionTextSize':'16px', 'pieSectionTextColor':'#ffffff', 'pieOuterStrokeWidth':'2px', 'pieOuterStrokeColor':'#ffffff'}}}%%
-pie title "AI Processing Time Distribution (Total: ~22 seconds)"
+pie title "AI Processing Time Distribution (Total: ~14 seconds)"
     "Model Loading" : 23
     "Risk Calculation" : 32
     "Data Processing" : 18
